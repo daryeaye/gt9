@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Geotopia Powerfall Pt2</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      overflow-y: auto;
+      background: url('https://daryeaye.github.io/geotopia/thatsit.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 10px 0 40px;
+      box-sizing: border-box;
+    }
+
+    #app-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    #header {
+      width: 960px;
+      background: #eee;
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 2000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      box-sizing: border-box;
+    }
+
+    #header input#username {
+      font-size: 16px;
+      padding: 5px;
+    }
+
+    #confirmBtn,
+    #introBtn,
+    #openFileBtn,
+    #prev-btn,
+    #next-btn,
+    #check-btn,
+    #collapse-widget,
+    #side-widget button:not(#collapse-widget) {
+      font-family: "Love Ya Like A Sister", cursive;
+    }
+
+    #confirmBtn,
+    #introBtn {
+      margin-left: 10px;
+      font-size: 22px;
+      padding: 6px 12px;
+      cursor: pointer;
+      background-color: lightblue;
+      border: none;
+      line-height: 1;
+    }
+
+    #progressBar {
+      flex: 1;
+      background: #ccc;
+      height: 20px;
+      margin: 0 10px;
+      position: relative;
+    }
+
+    #progress {
+      background: green;
+      height: 100%;
+      width: 0%;
+    }
+
+    #progressText {
+      font-size: 16px;
+    }
+
+    #main-area {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    #main-wrapper {
+      position: relative;
+      width: 960px;
+    }
+
+    #container {
+      position: relative;
+      width: 960px;
+      height: 540px;
+      border: 1px solid #ccc;
+      background: white;
+      overflow: hidden;
+    }
+
+    .page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 960px;
+      height: 540px;
+      display: none;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100% 100%;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .textbox,
+    .workbox {
+      position: absolute;
+      background-color: rgba(255, 255, 224, 0.72);
+      border: 1px solid black;
+      font-family: "Comic Sans MS", sans-serif;
+      font-size: 20px;
+      color: black;
+      padding: 4px 6px;
+      box-sizing: border-box;
+      z-index: 30;
+    }
+
+    .workbox {
+      resize: none;
+      overflow: auto;
+    }
+
+    .hub-hotspot,
+    .choice-hotspot,
+    .invisible-choice {
+      position: absolute;
+      background: transparent !important;
+      border: none !important;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      z-index: 40;
+    }
+
+    .checkmark {
+      position: absolute;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      z-index: 45;
+      pointer-events: none;
+      text-shadow: 0 2px 4px rgba(255,255,255,0.95);
+    }
+
+    #page4-next-overlay {
+      position: absolute;
+      left: 237px;
+      top: 358px;
+      width: 477px;
+      height: 103px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(173, 216, 230, 0.5);
+      border: 2px solid rgba(0,0,0,0.25);
+      color: #000;
+      font-family: "Love Ya Like A Sister", cursive;
+      font-size: 48px;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 60;
+    }
+
+    #nav-buttons {
+      position: absolute;
+      top: 50%;
+      left: -175px;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 3000;
+      width: 165px;
+    }
+
+    #nav-buttons button {
+      width: 165px;
+      font-size: 30px;
+      background-color: lightblue;
+      border: none;
+      padding: 12px 10px;
+      margin: 0;
+      cursor: pointer;
+      line-height: 1;
+      display: none;
+    }
+
+    #check-btn {
+      font-size: 28px !important;
+      padding: 14px 8px !important;
+    }
+
+    #side-widget {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 200px;
+      height: 200px;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-sizing: border-box;
+      font-family: 'Caveat', cursive;
+      z-index: 999;
+      transition: all 0.25s ease;
+    }
+
+    #side-widget.collapsed {
+      width: 120px;
+      height: 24px;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: rgba(249, 249, 249, 0.95);
+      border: 1px solid #ccc;
+      font-family: "Comic Sans MS", sans-serif;
+      font-size: 8px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    #side-widget.collapsed * {
+      display: none !important;
+    }
+
+    #side-widget.collapsed::after {
+      content: "Translation";
+    }
+
+    #collapse-widget {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 22px;
+      height: 22px;
+      padding: 0;
+      line-height: 1;
+      font-size: 14px;
+      background: lightblue;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #side-widget p.title {
+      font-size: 24px;
+      text-align: center;
+      margin: 0 0 10px;
+    }
+
+    #side-widget button:not(#collapse-widget) {
+      display: block;
+      margin: 0 auto;
+      font-size: 20px;
+      cursor: pointer;
+      text-align: center;
+      background: lightblue;
+      border: none;
+      padding: 10px;
+    }
+
+    #side-widget a {
+      display: block;
+      margin: 0 auto;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: center;
+      background: lightblue;
+      border: none;
+      padding: 6px;
+      text-decoration: none;
+      color: inherit;
+      font-family: "Comic Sans MS", sans-serif;
+    }
+
+    #selection-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+      z-index: 1000;
+    }
+
+    #selection-box {
+      position: absolute;
+      border: 2px dashed red;
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    #role-container {
+      position: relative;
+      width: 960px;
+      height: 540px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      margin-top: 10px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    #role-stage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1600px;
+      height: 900px;
+      transform-origin: top left;
+      transform: scale(0.6);
+      background: url('https://daryeaye.github.io/geotopia/role.jpg') no-repeat center/cover;
+    }
+
+    .role-hotspot {
+      position: absolute;
+      background: rgba(255,0,0,0);
+      border: none;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    #pdfViewer {
+      position: absolute;
+      inset: 0;
+      display: none;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: #fff;
+      z-index: 5;
+    }
+
+    .pdfPageCanvas {
+      display: block;
+      margin: 12px auto;
+      background: white;
+    }
+
+    #pdfStatus {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-family: "Comic Sans MS", sans-serif;
+      font-size: 14px;
+      color: #111;
+      background: rgba(255,255,255,0.85);
+      padding: 6px 10px;
+      border: 1px solid rgba(0,0,0,0.15);
+      border-radius: 6px;
+      z-index: 10;
+      display: none;
+    }
+
+    #role-container.pdf-mode #role-stage {
+      display: none;
+    }
+
+    #openFileWrap {
+      width: 960px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    #openFileBtn {
+      font-size: 20px;
+      padding: 8px 16px;
+      background: lightblue;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+      line-height: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app-container">
+    <div id="header">
+      <div>
+        <input type="text" id="username" placeholder="Enter your name" />
+        <button id="confirmBtn" onclick="confirmName()">Confirm</button>
+        <button id="introBtn" onclick="openIntro()">Intro</button>
+      </div>
+
+      <div id="progressBar">
+        <div id="progress"></div>
+      </div>
+
+      <span id="progressText">0% completed</span>
+    </div>
+
+    <div id="main-area">
+      <div id="main-wrapper">
+        <div id="nav-buttons">
+          <button id="prev-btn" type="button" onclick="prevPage()">Previous</button>
+          <button id="next-btn" type="button" onclick="nextPage()">Next</button>
+          <button id="check-btn" type="button" onclick="checkCurrentHubAnswer()">Check My Answer</button>
+        </div>
+
+        <div id="container">
+          <div id="page1" class="page active" style="background-image:url('https://daryeaye.github.io/gt9/9-01.jpg');"></div>
+
+          <div id="page2" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-02.jpg');"></div>
+
+          <div id="page3" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-03.jpg');">
+            <input id="page3-a1" type="text" class="textbox" data-savekey="gt9-p3-a1" spellcheck="false"
+              style="left:445px; top:189px; width:488px; height:78px;" />
+            <input id="page3-a2" type="text" class="textbox" data-savekey="gt9-p3-a2" spellcheck="false"
+              style="left:445px; top:314px; width:488px; height:78px;" />
+            <input id="page3-a3" type="text" class="textbox" data-savekey="gt9-p3-a3" spellcheck="false"
+              style="left:445px; top:434px; width:488px; height:78px;" />
+          </div>
+
+          <div id="page4" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-04.jpg');">
+            <div id="page4-hub"></div>
+            <div id="page4-checkmarks"></div>
+            <button id="page4-next-overlay" type="button">Next</button>
+          </div>
+
+          <div id="page5" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-05.jpg');">
+            <input id="page5-main" type="text" class="textbox" data-savekey="gt9-p5-main" spellcheck="false"
+              style="left:301px; top:330px; width:356px; height:81px;" />
+          </div>
+
+          <div id="page6" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-06.jpg');">
+            <input id="page6-main" type="text" class="textbox" data-savekey="gt9-p6-main" spellcheck="false"
+              style="left:301px; top:330px; width:356px; height:81px;" />
+          </div>
+
+          <div id="page7" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-07.jpg');">
+            <input id="page7-main" type="text" class="textbox" data-savekey="gt9-p7-main" spellcheck="false"
+              style="left:301px; top:330px; width:356px; height:81px;" />
+          </div>
+
+          <div id="page8" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-08.jpg');">
+<textarea id="page8-work" class="workbox" data-savekey="gt9-p8-work" spellcheck="false"
+  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+<input id="page8-answer" type="text" class="textbox" data-savekey="gt9-p8-answer" spellcheck="false"
+  style="left:648px; top:414px; width:111px; height:36px;" />
+          </div>
+
+          <div id="page9" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-09.jpg');">
+            <textarea id="page9-work" class="workbox" data-savekey="gt9-p9-work" spellcheck="false"
+  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+            <input id="page9-answer" type="text" class="textbox" data-savekey="gt9-p9-answer" spellcheck="false"
+  style="left:648px; top:414px; width:111px; height:36px;" />
+          </div>
+
+          <div id="page10" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-10.jpg');">
+            <textarea id="page10-work" class="workbox" data-savekey="gt9-p10-work" spellcheck="false"
+  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+            <input id="page10-answer" type="text" class="textbox" data-savekey="gt9-p10-answer" spellcheck="false"
+  style="left:648px; top:414px; width:111px; height:36px;" />
+          </div>
+
+          <div id="page11" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-11.jpg');">
+            <textarea id="page11-work" class="workbox" data-savekey="gt9-p11-work" spellcheck="false"
+  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+            <input id="page11-answer" type="text" class="textbox" data-savekey="gt9-p11-answer" spellcheck="false"
+  style="left:648px; top:414px; width:111px; height:36px;" />
+          </div>
+
+          <div id="page12" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-12.jpg');">
+            <textarea id="page12-work" class="workbox" data-savekey="gt9-p12-work" spellcheck="false"
+  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+            <input id="page12-answer" type="text" class="textbox" data-savekey="gt9-p12-answer" spellcheck="false"
+  style="left:648px; top:414px; width:111px; height:36px;" />
+          </div>
+
+          <div id="page13" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-13.jpg');">
+            <textarea id="page13-work" class="workbox" data-savekey="gt9-p13-work" spellcheck="false"
+  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+            <input id="page13-answer" type="text" class="textbox" data-savekey="gt9-p13-answer" spellcheck="false"
+  style="left:648px; top:414px; width:111px; height:36px;" />
+          </div>
+
+          <div id="page14" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-14.jpg');">
+            <textarea id="page14-work" class="workbox" data-savekey="gt9-p14-work" spellcheck="false"
+  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+            <input id="page14-answer" type="text" class="textbox" data-savekey="gt9-p14-answer" spellcheck="false"
+  style="left:648px; top:414px; width:111px; height:36px;" />
+          </div>
+
+          <div id="page15" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-15.jpg');">
+            <textarea id="page15-work" class="workbox" data-savekey="gt9-p15-work" spellcheck="false"
+  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+            <input id="page15-answer" type="text" class="textbox" data-savekey="gt9-p15-answer" spellcheck="false"
+  style="left:648px; top:414px; width:111px; height:36px;" />
+          </div>
+
+          <div id="page16" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-16.jpg');">
+            <textarea id="page16-work" class="workbox" data-savekey="gt9-p16-work" spellcheck="false"
+  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+            <input id="page16-answer" type="text" class="textbox" data-savekey="gt9-p16-answer" spellcheck="false"
+  style="left:648px; top:414px; width:111px; height:36px;" />
+          </div>
+
+          <div id="page17" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-17.jpg');">
+            <textarea id="page17-work" class="workbox" data-savekey="gt9-p17-work" spellcheck="false"
+  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+            <input id="page17-answer" type="text" class="textbox" data-savekey="gt9-p17-answer" spellcheck="false"
+  style="left:648px; top:414px; width:111px; height:36px;" />
+          </div>
+
+          <div id="page18" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-18.jpg');">
+            <textarea id="page18-work" class="workbox" data-savekey="gt9-p18-work" spellcheck="false"
+  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+            <input id="page18-answer" type="text" class="textbox" data-savekey="gt9-p18-answer" spellcheck="false"
+  style="left:648px; top:414px; width:111px; height:36px;" />
+          </div>
+
+          <div id="page19" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-19.jpg');">
+            <textarea id="page19-work" class="workbox" data-savekey="gt9-p19-work" spellcheck="false"
+  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+            <input id="page19-answer" type="text" class="textbox" data-savekey="gt9-p19-answer" spellcheck="false"
+  style="left:648px; top:414px; width:111px; height:36px;" />
+          </div>
+
+          <div id="page20" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-20.jpg');">
+            <textarea id="page20-work" class="workbox" data-savekey="gt9-p20-work" spellcheck="false"
+  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+            <input id="page20-answer" type="text" class="textbox" data-savekey="gt9-p20-answer" spellcheck="false"
+  style="left:648px; top:414px; width:111px; height:36px;" />
+          </div>
+
+          <div id="page21" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-21.jpg');">
+            <button class="choice-hotspot" id="page21-left-choice" type="button"
+              style="left:294px; top:331px; width:133px; height:95px;"></button>
+            <button class="choice-hotspot" id="page21-right-choice" type="button"
+              style="left:507px; top:331px; width:133px; height:95px;"></button>
+          </div>
+
+          <div id="page22" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-22.jpg');">
+            <input id="page22-code" type="text" class="textbox" data-savekey="gt9-p22-code" spellcheck="false"
+              style="left:548px; top:411px; width:262px; height:49px;"/>
+          </div>
+
+          <div id="page23" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-23.jpg');">
+            <input id="page23-code" type="text" class="textbox" data-savekey="gt9-p23-code" spellcheck="false"
+              style="left:123px; top:420px; width:267px; height:50px;"/>
+          </div>
+
+          <div id="page24" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-24.jpg');"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="role-container" aria-label="Role selection canvas">
+      <div id="pdfStatus">Loading PDF...</div>
+
+      <div id="role-stage">
+        <button class="role-hotspot" id="hotspot-officer"
+          style="left:195px; top:121px; width:328px; height:276px;"
+          aria-label="Officer" title="Officer"></button>
+
+        <button class="role-hotspot" id="hotspot-professor"
+          style="left:637px; top:121px; width:328px; height:277px;"
+          aria-label="Professor" title="Professor"></button>
+
+        <button class="role-hotspot" id="hotspot-hacker"
+          style="left:1079px; top:121px; width:328px; height:277px;"
+          aria-label="Hacker" title="Hacker"></button>
+
+        <button class="role-hotspot" id="hotspot-video"
+          style="left:502px; top:767px; width:596px; height:51px;"
+          aria-label="What is the file for?" title="What is the file for?"></button>
+      </div>
+
+      <div id="pdfViewer"></div>
+    </div>
+
+    <div id="openFileWrap">
+      <button id="openFileBtn" type="button">Open the file on a new tab</button>
+    </div>
+  </div>
+
+  <div id="side-widget" class="collapsed" aria-label="Translation widget">
+    <button id="collapse-widget" type="button" aria-label="Collapse translation widget">–</button>
+    <p class="title">Need translation?</p>
+    <button id="select-text" type="button">Select Text</button>
+    <p>
+      <a href="https://translate.google.com/?sl=en&tl=es&op=images" target="_blank">
+        Click me and paste from clipboard
+      </a>
+    </p>
+  </div>
+
+  <script>
+    const INTRO_URL = "https://youtu.be/F8paV80TGac";
+    const FINAL_UNLOCK_URL = "https://daryeaye.github.io/gt9/joseph.html";
+
+    const STORAGE = {
+      name: "gt9_player_name",
+      solved: "gt9_p2_solved_pages",
+      choice: "gt9_p2_choice_target",
+      page21Shown: "gt9_p2_page21_shown"
+    };
+
+    const SUB_PAGES = Array.from({ length: 16 }, (_, i) => i + 5); // 5-20
+
+const HUB_BOXES = {
+  5:  { left:149, top:15,  width:92,  height:85 },
+  8:  { left:252, top:15,  width:92,  height:85 },
+  10: { left:356, top:15,  width:92,  height:85 },
+  11: { left:460, top:15,  width:92,  height:85 },
+  18: { left:565, top:15,  width:92,  height:85 },
+  20: { left:669, top:15,  width:92,  height:85 },
+
+  19: { left:64,  top:53,  width:80,  height:111 },
+  17: { left:64,  top:182, width:80,  height:111 },
+  14: { left:64,  top:317, width:80,  height:121 },
+
+  6:  { left:813, top:53,  width:80,  height:111 },
+  16: { left:813, top:182, width:80,  height:111 },
+  15: { left:813, top:317, width:80,  height:121 },
+
+  12: { left:154, top:430, width:116, height:108 },
+  9:  { left:286, top:430, width:116, height:108 },
+  7:  { left:549, top:430, width:116, height:108 },
+  13: { left:682, top:430, width:116, height:108 },
+
+  24: { left:309, top:181, width:344, height:190 }
+};
+
+    const HUB_RULES = {
+      5:  { selector: "#page5-main",  contains: ["square"], caseInsensitive: true },
+      6:  { selector: "#page6-main",  contains: ["equi"], caseInsensitive: true },
+      7:  { selector: "#page7-main",  contains: ["10"], caseInsensitive: false },
+      8:  { selector: "#page8-answer",  contains: ["258"], caseInsensitive: false },
+      9:  { selector: "#page9-answer",  contains: ["120"], caseInsensitive: false },
+      10: { selector: "#page10-answer", contains: ["6.2"], caseInsensitive: false },
+      11: { selector: "#page11-answer", contains: ["13"], caseInsensitive: false },
+      12: { selector: "#page12-answer", contains: ["4.3"], caseInsensitive: false },
+      13: { selector: "#page13-answer", contains: ["60"], caseInsensitive: false },
+      14: { selector: "#page14-answer", contains: ["33"], caseInsensitive: false },
+      15: { selector: "#page15-answer", contains: ["127.8"], caseInsensitive: false },
+      16: { selector: "#page16-answer", contains: ["5.55"], caseInsensitive: false },
+      17: { selector: "#page17-answer", contains: ["33"], caseInsensitive: false },
+      18: { selector: "#page18-answer", contains: ["20"], caseInsensitive: false },
+      19: { selector: "#page19-answer", contains: ["26"], caseInsensitive: false },
+      20: { selector: "#page20-answer", contains: ["24"], caseInsensitive: false }
+    };
+
+    let currentPage = 1;
+    let currentPdfUrl = null;
+    let solvedHubPages = new Set();
+    let choiceTarget = "";
+    let page21ShownAlready = false;
+
+    function openIntro() {
+      window.open(INTRO_URL, "_blank");
+    }
+
+    function confirmName() {
+      const nameInput = document.getElementById("username");
+      const name = nameInput.value.trim();
+      if (name === "") return;
+
+      localStorage.setItem(STORAGE.name, name);
+      nameInput.value = name;
+      nameInput.disabled = true;
+      document.getElementById("confirmBtn").style.display = "none";
+    }
+
+    function loadName() {
+      const savedName = localStorage.getItem(STORAGE.name);
+      if (!savedName) return;
+
+      const nameInput = document.getElementById("username");
+      nameInput.value = savedName;
+      nameInput.disabled = true;
+      document.getElementById("confirmBtn").style.display = "none";
+    }
+
+    function initSaveInputs() {
+      const inputs = document.querySelectorAll("[data-savekey]");
+      inputs.forEach(input => {
+        const key = input.dataset.savekey;
+        const saved = localStorage.getItem(key);
+        if (saved !== null) input.value = saved;
+
+        input.addEventListener("input", () => {
+          localStorage.setItem(key, input.value);
+        });
+      });
+    }
+
+    function loadHubState() {
+      try {
+        const savedSolved = JSON.parse(localStorage.getItem(STORAGE.solved) || "[]");
+        solvedHubPages = new Set(savedSolved.filter(n => SUB_PAGES.includes(Number(n))).map(Number));
+      } catch (e) {
+        solvedHubPages = new Set();
+      }
+
+      choiceTarget = localStorage.getItem(STORAGE.choice) || "";
+      page21ShownAlready = localStorage.getItem(STORAGE.page21Shown) === "1";
+    }
+
+    function saveHubState() {
+      localStorage.setItem(STORAGE.solved, JSON.stringify(Array.from(solvedHubPages)));
+      localStorage.setItem(STORAGE.choice, choiceTarget || "");
+      localStorage.setItem(STORAGE.page21Shown, page21ShownAlready ? "1" : "0");
+    }
+
+function scalePage4Rect(rect) {
+  return rect;
+}
+
+    function buildPage4Hub() {
+      const hubLayer = document.getElementById("page4-hub");
+      const checkLayer = document.getElementById("page4-checkmarks");
+
+      Object.entries(HUB_BOXES).forEach(([pageNumStr, rect]) => {
+        const pageNum = Number(pageNumStr);
+        const r = scalePage4Rect(rect);
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "hub-hotspot";
+        btn.style.left = r.left + "px";
+        btn.style.top = r.top + "px";
+        btn.style.width = r.width + "px";
+        btn.style.height = r.height + "px";
+        btn.dataset.target = pageNum;
+        btn.addEventListener("click", () => {
+          showPage(pageNum);
+        });
+        hubLayer.appendChild(btn);
+
+        if (pageNum >= 5 && pageNum <= 20) {
+          const mark = document.createElement("div");
+          mark.id = "checkmark-" + pageNum;
+          mark.className = "checkmark";
+          mark.textContent = "✅";
+          mark.style.left = r.left + "px";
+          mark.style.top = r.top + "px";
+          mark.style.width = r.width + "px";
+          mark.style.height = r.height + "px";
+          checkLayer.appendChild(mark);
+        }
+      });
+
+      document.getElementById("page4-next-overlay").addEventListener("click", goToEndingFromHub);
+    }
+
+    function updateHubUI() {
+      SUB_PAGES.forEach(pageNum => {
+        const mark = document.getElementById("checkmark-" + pageNum);
+        if (mark) {
+          mark.style.display = solvedHubPages.has(pageNum) ? "flex" : "none";
+        }
+      });
+
+      const overlayBtn = document.getElementById("page4-next-overlay");
+      overlayBtn.style.display = (currentPage === 4 && allHubSolved()) ? "flex" : "none";
+    }
+
+    function allHubSolved() {
+      return SUB_PAGES.every(pageNum => solvedHubPages.has(pageNum));
+    }
+
+    function solvedHubCount() {
+      return solvedHubPages.size;
+    }
+
+    function normalizeForContains(value, caseInsensitive) {
+      return caseInsensitive ? value.toLowerCase() : value;
+    }
+
+function validatePage3() {
+
+  const top = (document.getElementById("page3-a1").value || "").trim();
+  const mid = (document.getElementById("page3-a2").value || "").trim().toLowerCase();
+  const bot = (document.getElementById("page3-a3").value || "").trim().toLowerCase();
+
+  if (top === "" || mid === "" || bot === "") return false;
+
+  const midOK =
+    mid.includes("2") ||
+    mid.includes("two") ||
+    mid.includes("half");
+
+  const botOK =
+    bot.includes("2") ||
+    bot.includes("two") ||
+    bot.includes("half");
+
+  return midOK && botOK;
+}
+
+    function validateHubPage(pageNum) {
+      const rule = HUB_RULES[pageNum];
+      if (!rule) return false;
+
+      const input = document.querySelector(rule.selector);
+      if (!input) return false;
+
+      const raw = (input.value || "").trim();
+      if (raw === "") return false;
+
+      const value = normalizeForContains(raw, rule.caseInsensitive);
+      return rule.contains.every(item => {
+        const needle = normalizeForContains(String(item), rule.caseInsensitive);
+        return value.includes(needle);
+      });
+    }
+
+    function nextPage() {
+      if (currentPage === 1) {
+        showPage(2);
+        return;
+      }
+
+      if (currentPage === 2) {
+        showPage(3);
+        return;
+      }
+
+      if (currentPage === 3) {
+        if (!validatePage3()) {
+          alert("Please make sure all three answers are correct before moving on.");
+          return;
+        }
+        showPage(4);
+        return;
+      }
+
+      if (currentPage === 4) {
+        goToEndingFromHub();
+      }
+    }
+
+    function goToEndingFromHub() {
+      if (!allHubSolved()) return;
+
+      if (!choiceTarget) {
+        showPage(21);
+        return;
+      }
+
+      showPage(Number(choiceTarget));
+    }
+
+    function prevPage() {
+      if (currentPage === 2) {
+        showPage(1);
+        return;
+      }
+
+      if (currentPage === 3) {
+        showPage(2);
+        return;
+      }
+
+      if (currentPage === 4) {
+        showPage(3);
+        return;
+      }
+
+      if ([21,22,23,24].includes(currentPage)) {
+        showPage(4);
+      }
+    }
+
+    function checkCurrentHubAnswer() {
+      if (!SUB_PAGES.includes(currentPage)) return;
+
+      const ok = validateHubPage(currentPage);
+
+      if (!ok) {
+        alert("Oops. You need to try again or you will lose the chance to win the grand prize!");
+        return;
+      }
+
+      const wasAlreadySolved = solvedHubPages.has(currentPage);
+      solvedHubPages.add(currentPage);
+      saveHubState();
+      updateHubUI();
+
+      const justReachedTen = !wasAlreadySolved && solvedHubCount() >= 10 && !page21ShownAlready;
+
+      if (justReachedTen) {
+        page21ShownAlready = true;
+        saveHubState();
+        showPage(21);
+        return;
+      }
+
+      showPage(4);
+    }
+
+    function showPage(pageNum) {
+      currentPage = pageNum;
+
+      for (let i = 1; i <= 24; i++) {
+        const page = document.getElementById("page" + i);
+        if (page) page.classList.remove("active");
+      }
+
+      const target = document.getElementById("page" + pageNum);
+      if (target) target.classList.add("active");
+
+      updateHubUI();
+      updateNavButtons();
+      updateProgress();
+    }
+
+    function updateNavButtons() {
+      const prevBtn = document.getElementById("prev-btn");
+      const nextBtn = document.getElementById("next-btn");
+      const checkBtn = document.getElementById("check-btn");
+
+      prevBtn.style.display = "none";
+      nextBtn.style.display = "none";
+      checkBtn.style.display = "none";
+
+      if (currentPage === 1) {
+        nextBtn.style.display = "inline-block";
+        return;
+      }
+
+      if (currentPage === 2 || currentPage === 3) {
+        prevBtn.style.display = "inline-block";
+        nextBtn.style.display = "inline-block";
+        return;
+      }
+
+      if (currentPage === 4) {
+        prevBtn.style.display = "inline-block";
+        nextBtn.style.display = allHubSolved() ? "inline-block" : "none";
+        return;
+      }
+
+      if (SUB_PAGES.includes(currentPage)) {
+        checkBtn.style.display = "inline-block";
+        return;
+      }
+
+      if ([21,22,23,24].includes(currentPage)) {
+        prevBtn.style.display = "inline-block";
+      }
+    }
+
+    function updateProgress() {
+      let baseSteps = 1;
+
+      if (currentPage >= 2) baseSteps = 2;
+      if (currentPage >= 3) baseSteps = 3;
+      if (currentPage >= 4 || SUB_PAGES.includes(currentPage) || [21,22,23,24].includes(currentPage)) baseSteps = 4;
+
+      const endingStep = [22,23].includes(currentPage) ? 1 : 0;
+      const totalSteps = 21;
+      const completedSteps = Math.min(baseSteps + solvedHubCount() + endingStep, totalSteps);
+      const pct = (completedSteps / totalSteps) * 100;
+
+      document.getElementById("progress").style.width = pct + "%";
+      document.getElementById("progressText").innerText = pct.toFixed(0) + "% completed";
+    }
+
+    function initPage21Choices() {
+      document.getElementById("page21-left-choice").addEventListener("click", () => {
+        choiceTarget = "23";
+        saveHubState();
+        showPage(4);
+      });
+
+      document.getElementById("page21-right-choice").addEventListener("click", () => {
+        choiceTarget = "22";
+        saveHubState();
+        showPage(4);
+      });
+    }
+
+    function initFinalCodeInputs() {
+      ["page22-code", "page23-code"].forEach(id => {
+        const input = document.getElementById(id);
+        if (!input) return;
+
+        input.addEventListener("input", () => {
+          if (input.value.trim() === "fe" && input.dataset.done !== "1") {
+            input.dataset.done = "1";
+            window.open(FINAL_UNLOCK_URL, "_blank");
+          }
+        });
+      });
+    }
+
+    function initPdfJs() {
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    }
+
+    async function renderPdfIntoSecondCanvas(pdfUrl) {
+      currentPdfUrl = pdfUrl;
+
+      const roleContainer = document.getElementById("role-container");
+      const viewer = document.getElementById("pdfViewer");
+      const status = document.getElementById("pdfStatus");
+
+      roleContainer.classList.add("pdf-mode");
+      viewer.style.display = "block";
+      viewer.innerHTML = "";
+      viewer.scrollTop = 0;
+
+      status.style.display = "block";
+      status.textContent = "Loading PDF...";
+
+      try {
+        const loadingTask = pdfjsLib.getDocument({ url: pdfUrl });
+        const pdf = await loadingTask.promise;
+
+        status.textContent = "Rendering pages...";
+
+        const targetWidth = 920;
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+          const page = await pdf.getPage(pageNum);
+          const viewport1 = page.getViewport({ scale: 1 });
+          const scale = targetWidth / viewport1.width;
+          const viewport = page.getViewport({ scale });
+
+          const c = document.createElement("canvas");
+          c.className = "pdfPageCanvas";
+          c.width = Math.floor(viewport.width);
+          c.height = Math.floor(viewport.height);
+
+          const ctx = c.getContext("2d", { alpha: false });
+          viewer.appendChild(c);
+
+          await page.render({ canvasContext: ctx, viewport }).promise;
+        }
+
+        status.style.display = "none";
+      } catch (err) {
+        console.error("PDF.js render error:", err);
+        status.textContent = "Failed to load PDF (see Console).";
+      }
+    }
+
+    function initSecondCanvasHotspots() {
+      document.getElementById("hotspot-officer").addEventListener("click", function () {
+        renderPdfIntoSecondCanvas("https://daryeaye.github.io/gt8/GT2%20Officer.pdf");
+      });
+
+      document.getElementById("hotspot-professor").addEventListener("click", function () {
+        renderPdfIntoSecondCanvas("https://daryeaye.github.io/gt8/GT2%20Professor.pdf");
+      });
+
+      document.getElementById("hotspot-hacker").addEventListener("click", function () {
+        renderPdfIntoSecondCanvas("https://daryeaye.github.io/gt8/GT2%20Hacker.pdf");
+      });
+
+      document.getElementById("hotspot-video").addEventListener("click", function () {
+        window.open("https://www.youtube.com/watch?v=Fj98o3aFfk8", "_blank");
+      });
+    }
+
+    function initOpenFileButton() {
+      document.getElementById("openFileBtn").addEventListener("click", () => {
+        if (!currentPdfUrl) {
+          alert("Please select a role file first.");
+          return;
+        }
+        window.open(currentPdfUrl, "_blank");
+      });
+    }
+
+    function initTranslatorWidget() {
+      const widget = document.getElementById("side-widget");
+      const collapseBtn = document.getElementById("collapse-widget");
+
+      widget.addEventListener("click", function () {
+        if (widget.classList.contains("collapsed")) {
+          widget.classList.remove("collapsed");
+        }
+      });
+
+      collapseBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        widget.classList.add("collapsed");
+      });
+    }
+
+    function initTranslationScreenshotTool() {
+      document.getElementById("select-text").addEventListener("click", function () {
+        const overlay = document.createElement("div");
+        overlay.id = "selection-overlay";
+        document.body.appendChild(overlay);
+
+        let startX, startY, selectionBox;
+
+        overlay.addEventListener("mousedown", function (e) {
+          startX = e.clientX;
+          startY = e.clientY;
+
+          selectionBox = document.createElement("div");
+          selectionBox.id = "selection-box";
+          selectionBox.style.left = startX + "px";
+          selectionBox.style.top = startY + "px";
+          selectionBox.style.width = "0px";
+          selectionBox.style.height = "0px";
+          overlay.appendChild(selectionBox);
+
+          function mouseMoveHandler(e) {
+            const currentX = e.clientX;
+            const currentY = e.clientY;
+            const rectLeft = Math.min(startX, currentX);
+            const rectTop = Math.min(startY, currentY);
+            const rectWidth = Math.abs(currentX - startX);
+            const rectHeight = Math.abs(currentY - startY);
+
+            selectionBox.style.left = rectLeft + "px";
+            selectionBox.style.top = rectTop + "px";
+            selectionBox.style.width = rectWidth + "px";
+            selectionBox.style.height = rectHeight + "px";
+          }
+
+          function mouseUpHandler() {
+            overlay.removeEventListener("mousemove", mouseMoveHandler);
+            overlay.removeEventListener("mouseup", mouseUpHandler);
+
+            const boxRect = selectionBox.getBoundingClientRect();
+            document.body.removeChild(overlay);
+
+            const target = document.getElementById("container");
+            const targetRect = target.getBoundingClientRect();
+
+            html2canvas(target, { useCORS: true, allowTaint: false }).then(canvas => {
+              const scaleFactor = canvas.width / targetRect.width;
+              const sx = (boxRect.left - targetRect.left) * scaleFactor;
+              const sy = (boxRect.top - targetRect.top) * scaleFactor;
+              const sWidth = boxRect.width * scaleFactor;
+              const sHeight = boxRect.height * scaleFactor;
+
+              const croppedCanvas = document.createElement("canvas");
+              croppedCanvas.width = sWidth;
+              croppedCanvas.height = sHeight;
+
+              const ctx = croppedCanvas.getContext("2d");
+              ctx.drawImage(canvas, sx, sy, sWidth, sHeight, 0, 0, sWidth, sHeight);
+
+              croppedCanvas.toBlob(blob => {
+                if (!blob) return;
+
+                const item = new ClipboardItem({ "image/png": blob });
+                navigator.clipboard.write([item]).then(() => {
+                  alert("Screenshot copied to clipboard.");
+                }).catch(err => {
+                  console.error("Failed to copy screenshot to clipboard", err);
+                  alert("Failed to copy screenshot to clipboard.");
+                });
+              });
+            });
+          }
+
+          overlay.addEventListener("mousemove", mouseMoveHandler);
+          overlay.addEventListener("mouseup", mouseUpHandler);
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      loadName();
+      loadHubState();
+      initSaveInputs();
+      buildPage4Hub();
+      initPage21Choices();
+      initFinalCodeInputs();
+
+      initPdfJs();
+      initSecondCanvasHotspots();
+      initOpenFileButton();
+
+      initTranslatorWidget();
+      initTranslationScreenshotTool();
+
+      showPage(1);
+    });
+  </script>
+
+  <!-- ©XDY. All rights reserved. This code is the intellectual property of XDY. Unauthorized copying, reproduction, or redistribution is strictly prohibited. For educational use only. Contact the author for permissions. -->
+</body>
+</html>
