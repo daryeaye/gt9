@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Merchant's Quest 2</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('https://daryeaye.github.io/geotopia/thatsit2.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+    #app-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* 960x540 canvas */
+    #container {
+      position: relative;
+      width: 960px;
+      height: 540px;
+      border: 1px solid #ccc;
+      background: white;
+      overflow: hidden;
+    }
+
+    .page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 960px;
+      height: 540px;
+      display: none;
+      background-size: cover;
+      background-position: center;
+    }
+    .page.active { display: block; }
+
+    /* Clickable box */
+    .box {
+      position: absolute;
+      border: 2px dashed red;     /* red dotted/dashed border */
+      background-color: rgba(255, 0, 0, 0.0); /* transparent */
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+
+    #nav-buttons { margin-top: 10px; }
+    button {
+      font-family: "Comic Sans MS", sans-serif;
+      font-size: 20px;
+      background-color: lightblue;
+      border: none;
+      padding: 10px 20px;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+  </style>
+
+  <!-- Side Widget Resources -->
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    #side-widget {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 200px;
+      height: 200px;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-sizing: border-box;
+      font-family: 'Caveat', cursive;
+      z-index: 999;
+    }
+    #side-widget p.title {
+      font-size: 24px;
+      text-align: center;
+      margin: 0 0 10px;
+    }
+    #side-widget button,
+    #side-widget a {
+      display: block;
+      margin: 0 auto;
+      font-size: 20px;
+      cursor: pointer;
+      text-align: center;
+      background: lightblue;
+      border: none;
+      padding: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+    #selection-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+      z-index: 1000;
+    }
+    #selection-box {
+      position: absolute;
+      border: 2px dashed red;
+      background: rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app-container">
+    <div id="container">
+
+      <!-- Page 1 -->
+      <div id="page1" class="page active"
+           style="background: url('https://daryeaye.github.io/gt9/9-ec1.jpg') no-repeat center/cover;">
+        <a href="https://daryeaye.github.io/xinlindywane/mr.jpg" target="_blank">
+          <div class="box" style="left:84px; top:123px; width:229px; height:268px;"></div>
+        </a>
+      </div>
+
+      <!-- Page 2 -->
+      <div id="page2" class="page"
+           style="background: url('https://daryeaye.github.io/gt9/9-ec2.jpg') no-repeat center/cover;">
+      </div>
+
+      <!-- Page 3 -->
+      <div id="page3" class="page"
+           style="background: url('https://daryeaye.github.io/gt9/9-ec3.jpg') no-repeat center/cover;">
+        <a href="https://polypad.amplify.com/p/g8eh7VTDvyYA" target="_blank">
+          <div class="box" style="left:530px; top:25px; width:135px; height:46px;"></div>
+        </a>
+      </div>
+
+    </div>
+
+    <div id="nav-buttons">
+      <button id="prev-btn" onclick="prevPage()">Previous</button>
+      <button id="next-btn" onclick="nextPage()">Next</button>
+    </div>
+  </div>
+
+  <!-- Side Widget -->
+  <div id="side-widget">
+    <p class="title">Need translation?</p>
+    <button id="select-text">Select Text</button>
+    <p>
+      <a href="https://translate.google.com/?sl=en&tl=es&op=images" target="_blank">
+        Click me and paste from clipboard
+      </a>
+    </p>
+  </div>
+
+  <!-- Side Widget Script -->
+  <script>
+    document.getElementById('select-text').addEventListener('click', function() {
+      const overlay = document.createElement('div');
+      overlay.id = 'selection-overlay';
+      document.body.appendChild(overlay);
+
+      let startX, startY, selectionBox;
+
+      overlay.addEventListener('mousedown', function(e) {
+        startX = e.clientX;
+        startY = e.clientY;
+
+        selectionBox = document.createElement('div');
+        selectionBox.id = 'selection-box';
+        selectionBox.style.left = startX + 'px';
+        selectionBox.style.top = startY + 'px';
+        selectionBox.style.width = '0px';
+        selectionBox.style.height = '0px';
+        overlay.appendChild(selectionBox);
+
+        function mouseMoveHandler(e) {
+          const currentX = e.clientX;
+          const currentY = e.clientY;
+          selectionBox.style.left = Math.min(startX, currentX) + 'px';
+          selectionBox.style.top = Math.min(startY, currentY) + 'px';
+          selectionBox.style.width = Math.abs(currentX - startX) + 'px';
+          selectionBox.style.height = Math.abs(currentY - startY) + 'px';
+        }
+
+        function mouseUpHandler() {
+          overlay.removeEventListener('mousemove', mouseMoveHandler);
+          overlay.removeEventListener('mouseup', mouseUpHandler);
+
+          const boxRect = selectionBox.getBoundingClientRect();
+          document.body.removeChild(overlay);
+
+          const target = document.getElementById('container');
+          const targetRect = target.getBoundingClientRect();
+
+          html2canvas(target, { useCORS: true, allowTaint: false }).then(canvas => {
+            const scaleFactor = canvas.width / targetRect.width;
+            const sx = (boxRect.left - targetRect.left) * scaleFactor;
+            const sy = (boxRect.top - targetRect.top) * scaleFactor;
+            const sWidth = boxRect.width * scaleFactor;
+            const sHeight = boxRect.height * scaleFactor;
+
+            const croppedCanvas = document.createElement('canvas');
+            croppedCanvas.width = sWidth;
+            croppedCanvas.height = sHeight;
+
+            const ctx = croppedCanvas.getContext('2d');
+            ctx.drawImage(canvas, sx, sy, sWidth, sHeight, 0, 0, sWidth, sHeight);
+
+            croppedCanvas.toBlob(blob => {
+              if (blob) {
+                const item = new ClipboardItem({ 'image/png': blob });
+                navigator.clipboard.write([item]).then(() => {
+                  alert('Screenshot copied to clipboard.');
+                }).catch(err => {
+                  console.error('Failed to copy screenshot to clipboard', err);
+                  alert('Failed to copy screenshot to clipboard.');
+                });
+              }
+            });
+          });
+        }
+
+        overlay.addEventListener('mousemove', mouseMoveHandler);
+        overlay.addEventListener('mouseup', mouseUpHandler);
+      });
+    });
+  </script>
+
+  <!-- Main Paging Script -->
+  <script>
+    let currentPage = 1;
+    const totalPages = 3;
+
+    function showPage(pageNum) {
+      for (let i = 1; i <= totalPages; i++) {
+        document.getElementById('page' + i).classList.remove('active');
+      }
+      document.getElementById('page' + pageNum).classList.add('active');
+
+      document.getElementById("prev-btn").style.display = (pageNum === 1) ? "none" : "inline-block";
+      document.getElementById("next-btn").style.display = (pageNum === totalPages) ? "none" : "inline-block";
+    }
+
+    function nextPage() {
+      if (currentPage < totalPages) {
+        currentPage++;
+        showPage(currentPage);
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      showPage(currentPage);
+    });
+  </script>
+</body>
+</html>
