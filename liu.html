@@ -41,7 +41,8 @@
       padding: 10px;
       margin-bottom: 10px;
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      gap: 8px;
       position: sticky;
       top: 0;
       z-index: 2000;
@@ -49,12 +50,34 @@
       box-sizing: border-box;
     }
 
-    #header input#username {
-      font-size: 16px;
-      padding: 5px;
+    #topAuthRow,
+    #progressRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
-    #confirmBtn,
+    #topAuthLeft {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    #student-username,
+    #student-password {
+      font-size: 16px;
+      padding: 5px 8px;
+      width: 150px;
+      box-sizing: border-box;
+    }
+
+    #registerBtn,
+    #loginBtn,
+    #logoutBtn,
     #introBtn,
     #openFileBtn,
     #prev-btn,
@@ -65,22 +88,31 @@
       font-family: "Love Ya Like A Sister", cursive;
     }
 
-    #confirmBtn,
+    #registerBtn,
+    #loginBtn,
+    #logoutBtn,
     #introBtn {
-      margin-left: 10px;
       font-size: 22px;
       padding: 6px 12px;
       cursor: pointer;
       background-color: lightblue;
       border: none;
       line-height: 1;
+      border-radius: 6px;
+    }
+
+    #authStatus {
+      font-size: 15px;
+      font-family: "Comic Sans MS", sans-serif;
+      color: #222;
+      min-width: 150px;
     }
 
     #progressBar {
       flex: 1;
       background: #ccc;
       height: 20px;
-      margin: 0 10px;
+      margin: 0 10px 0 0;
       position: relative;
     }
 
@@ -92,6 +124,7 @@
 
     #progressText {
       font-size: 16px;
+      white-space: nowrap;
     }
 
     #main-area {
@@ -149,8 +182,7 @@
     }
 
     .hub-hotspot,
-    .choice-hotspot,
-    .invisible-choice {
+    .choice-hotspot {
       position: absolute;
       background: transparent !important;
       border: none !important;
@@ -212,6 +244,7 @@
       cursor: pointer;
       line-height: 1;
       display: none;
+      border-radius: 6px;
     }
 
     #check-btn {
@@ -408,17 +441,24 @@
 <body>
   <div id="app-container">
     <div id="header">
-      <div>
-        <input type="text" id="username" placeholder="Enter your name" />
-        <button id="confirmBtn" onclick="confirmName()">Confirm</button>
-        <button id="introBtn" onclick="openIntro()">Intro</button>
+      <div id="topAuthRow">
+        <div id="topAuthLeft">
+          <input type="text" id="student-username" placeholder="Username" autocomplete="username" />
+          <input type="password" id="student-password" placeholder="Password" autocomplete="current-password" />
+          <button id="registerBtn" type="button">Register</button>
+          <button id="loginBtn" type="button">Login</button>
+          <button id="logoutBtn" type="button">Logout</button>
+          <button id="introBtn" type="button" onclick="openIntro()">Intro</button>
+          <span id="authStatus">Not signed in</span>
+        </div>
       </div>
 
-      <div id="progressBar">
-        <div id="progress"></div>
+      <div id="progressRow">
+        <div id="progressBar">
+          <div id="progress"></div>
+        </div>
+        <span id="progressText">0% completed</span>
       </div>
-
-      <span id="progressText">0% completed</span>
     </div>
 
     <div id="main-area">
@@ -465,94 +505,94 @@
           </div>
 
           <div id="page8" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-08.jpg');">
-<textarea id="page8-work" class="workbox" data-savekey="gt9-p8-work" spellcheck="false"
-  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
-<input id="page8-answer" type="text" class="textbox" data-savekey="gt9-p8-answer" spellcheck="false"
-  style="left:648px; top:414px; width:111px; height:36px;" />
+            <textarea id="page8-work" class="workbox" data-savekey="gt9-p8-work" spellcheck="false"
+              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+            <input id="page8-answer" type="text" class="textbox" data-savekey="gt9-p8-answer" spellcheck="false"
+              style="left:648px; top:414px; width:111px; height:36px;" />
           </div>
 
           <div id="page9" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-09.jpg');">
             <textarea id="page9-work" class="workbox" data-savekey="gt9-p9-work" spellcheck="false"
-  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
             <input id="page9-answer" type="text" class="textbox" data-savekey="gt9-p9-answer" spellcheck="false"
-  style="left:648px; top:414px; width:111px; height:36px;" />
+              style="left:648px; top:414px; width:111px; height:36px;" />
           </div>
 
           <div id="page10" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-10.jpg');">
             <textarea id="page10-work" class="workbox" data-savekey="gt9-p10-work" spellcheck="false"
-  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
             <input id="page10-answer" type="text" class="textbox" data-savekey="gt9-p10-answer" spellcheck="false"
-  style="left:648px; top:414px; width:111px; height:36px;" />
+              style="left:648px; top:414px; width:111px; height:36px;" />
           </div>
 
           <div id="page11" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-11.jpg');">
             <textarea id="page11-work" class="workbox" data-savekey="gt9-p11-work" spellcheck="false"
-  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
             <input id="page11-answer" type="text" class="textbox" data-savekey="gt9-p11-answer" spellcheck="false"
-  style="left:648px; top:414px; width:111px; height:36px;" />
+              style="left:648px; top:414px; width:111px; height:36px;" />
           </div>
 
           <div id="page12" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-12.jpg');">
             <textarea id="page12-work" class="workbox" data-savekey="gt9-p12-work" spellcheck="false"
-  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
             <input id="page12-answer" type="text" class="textbox" data-savekey="gt9-p12-answer" spellcheck="false"
-  style="left:648px; top:414px; width:111px; height:36px;" />
+              style="left:648px; top:414px; width:111px; height:36px;" />
           </div>
 
           <div id="page13" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-13.jpg');">
             <textarea id="page13-work" class="workbox" data-savekey="gt9-p13-work" spellcheck="false"
-  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
             <input id="page13-answer" type="text" class="textbox" data-savekey="gt9-p13-answer" spellcheck="false"
-  style="left:648px; top:414px; width:111px; height:36px;" />
+              style="left:648px; top:414px; width:111px; height:36px;" />
           </div>
 
           <div id="page14" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-14.jpg');">
             <textarea id="page14-work" class="workbox" data-savekey="gt9-p14-work" spellcheck="false"
-  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
             <input id="page14-answer" type="text" class="textbox" data-savekey="gt9-p14-answer" spellcheck="false"
-  style="left:648px; top:414px; width:111px; height:36px;" />
+              style="left:648px; top:414px; width:111px; height:36px;" />
           </div>
 
           <div id="page15" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-15.jpg');">
             <textarea id="page15-work" class="workbox" data-savekey="gt9-p15-work" spellcheck="false"
-  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
             <input id="page15-answer" type="text" class="textbox" data-savekey="gt9-p15-answer" spellcheck="false"
-  style="left:648px; top:414px; width:111px; height:36px;" />
+              style="left:648px; top:414px; width:111px; height:36px;" />
           </div>
 
           <div id="page16" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-16.jpg');">
             <textarea id="page16-work" class="workbox" data-savekey="gt9-p16-work" spellcheck="false"
-  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
             <input id="page16-answer" type="text" class="textbox" data-savekey="gt9-p16-answer" spellcheck="false"
-  style="left:648px; top:414px; width:111px; height:36px;" />
+              style="left:648px; top:414px; width:111px; height:36px;" />
           </div>
 
           <div id="page17" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-17.jpg');">
             <textarea id="page17-work" class="workbox" data-savekey="gt9-p17-work" spellcheck="false"
-  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
             <input id="page17-answer" type="text" class="textbox" data-savekey="gt9-p17-answer" spellcheck="false"
-  style="left:648px; top:414px; width:111px; height:36px;" />
+              style="left:648px; top:414px; width:111px; height:36px;" />
           </div>
 
           <div id="page18" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-18.jpg');">
             <textarea id="page18-work" class="workbox" data-savekey="gt9-p18-work" spellcheck="false"
-  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
             <input id="page18-answer" type="text" class="textbox" data-savekey="gt9-p18-answer" spellcheck="false"
-  style="left:648px; top:414px; width:111px; height:36px;" />
+              style="left:648px; top:414px; width:111px; height:36px;" />
           </div>
 
           <div id="page19" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-19.jpg');">
             <textarea id="page19-work" class="workbox" data-savekey="gt9-p19-work" spellcheck="false"
-  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
             <input id="page19-answer" type="text" class="textbox" data-savekey="gt9-p19-answer" spellcheck="false"
-  style="left:648px; top:414px; width:111px; height:36px;" />
+              style="left:648px; top:414px; width:111px; height:36px;" />
           </div>
 
           <div id="page20" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-20.jpg');">
             <textarea id="page20-work" class="workbox" data-savekey="gt9-p20-work" spellcheck="false"
-  style="left:553px; top:195px; width:309px; height:167px;"></textarea>
+              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
             <input id="page20-answer" type="text" class="textbox" data-savekey="gt9-p20-answer" spellcheck="false"
-  style="left:648px; top:414px; width:111px; height:36px;" />
+              style="left:648px; top:414px; width:111px; height:36px;" />
           </div>
 
           <div id="page21" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-21.jpg');">
@@ -564,12 +604,12 @@
 
           <div id="page22" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-22.jpg');">
             <input id="page22-code" type="text" class="textbox" data-savekey="gt9-p22-code" spellcheck="false"
-              style="left:548px; top:411px; width:262px; height:49px;"/>
+              style="left:548px; top:411px; width:262px; height:49px;" />
           </div>
 
           <div id="page23" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-23.jpg');">
             <input id="page23-code" type="text" class="textbox" data-savekey="gt9-p23-code" spellcheck="false"
-              style="left:123px; top:420px; width:267px; height:50px;"/>
+              style="left:123px; top:420px; width:267px; height:50px;" />
           </div>
 
           <div id="page24" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-24.jpg');"></div>
@@ -620,39 +660,38 @@
   <script>
     const INTRO_URL = "https://youtu.be/F8paV80TGac";
     const FINAL_UNLOCK_URL = "https://daryeaye.github.io/gt9/zach.html";
+    const WORKER_BASE_URL = "https://geotopia-powerfall-auth-api.daryeaye.workers.dev";
 
-    const STORAGE = {
-      name: "gt9_player_name",
-      solved: "gt9_p2_solved_pages",
-      choice: "gt9_p2_choice_target",
-      page21Shown: "gt9_p2_page21_shown"
+    const SESSION_STORAGE = {
+      token: "gt9_auth_token",
+      username: "gt9_auth_username"
     };
 
-    const SUB_PAGES = Array.from({ length: 16 }, (_, i) => i + 5); // 5-20
+    const SUB_PAGES = Array.from({ length: 16 }, (_, i) => i + 5);
 
-const HUB_BOXES = {
-  5:  { left:149, top:15,  width:92,  height:85 },
-  8:  { left:252, top:15,  width:92,  height:85 },
-  10: { left:356, top:15,  width:92,  height:85 },
-  11: { left:460, top:15,  width:92,  height:85 },
-  18: { left:565, top:15,  width:92,  height:85 },
-  20: { left:669, top:15,  width:92,  height:85 },
+    const HUB_BOXES = {
+      5:  { left:149, top:15,  width:92,  height:85 },
+      8:  { left:252, top:15,  width:92,  height:85 },
+      10: { left:356, top:15,  width:92,  height:85 },
+      11: { left:460, top:15,  width:92,  height:85 },
+      18: { left:565, top:15,  width:92,  height:85 },
+      20: { left:669, top:15,  width:92,  height:85 },
 
-  19: { left:64,  top:53,  width:80,  height:111 },
-  17: { left:64,  top:182, width:80,  height:111 },
-  14: { left:64,  top:317, width:80,  height:121 },
+      19: { left:64,  top:53,  width:80,  height:111 },
+      17: { left:64,  top:182, width:80,  height:111 },
+      14: { left:64,  top:317, width:80,  height:121 },
 
-  6:  { left:813, top:53,  width:80,  height:111 },
-  16: { left:813, top:182, width:80,  height:111 },
-  15: { left:813, top:317, width:80,  height:121 },
+      6:  { left:813, top:53,  width:80,  height:111 },
+      16: { left:813, top:182, width:80,  height:111 },
+      15: { left:813, top:317, width:80,  height:121 },
 
-  12: { left:154, top:430, width:116, height:108 },
-  9:  { left:286, top:430, width:116, height:108 },
-  7:  { left:549, top:430, width:116, height:108 },
-  13: { left:682, top:430, width:116, height:108 },
+      12: { left:154, top:430, width:116, height:108 },
+      9:  { left:286, top:430, width:116, height:108 },
+      7:  { left:549, top:430, width:116, height:108 },
+      13: { left:682, top:430, width:116, height:108 },
 
-  24: { left:309, top:181, width:344, height:190 }
-};
+      24: { left:309, top:181, width:344, height:190 }
+    };
 
     const HUB_RULES = {
       5:  { selector: "#page5-main",  contains: ["square"], caseInsensitive: true },
@@ -679,65 +718,320 @@ const HUB_BOXES = {
     let choiceTarget = "";
     let page21ShownAlready = false;
 
+    let authToken = "";
+    let authUsername = "";
+    let autoSaveTimer = null;
+    let saveInFlight = false;
+    let saveQueued = false;
+    let isApplyingRemoteData = false;
+
     function openIntro() {
       window.open(INTRO_URL, "_blank");
     }
 
-    function confirmName() {
-      const nameInput = document.getElementById("username");
-      const name = nameInput.value.trim();
-      if (name === "") return;
-
-      localStorage.setItem(STORAGE.name, name);
-      nameInput.value = name;
-      nameInput.disabled = true;
-      document.getElementById("confirmBtn").style.display = "none";
+    function getAuthElements() {
+      return {
+        usernameInput: document.getElementById("student-username"),
+        passwordInput: document.getElementById("student-password"),
+        authStatus: document.getElementById("authStatus"),
+        registerBtn: document.getElementById("registerBtn"),
+        loginBtn: document.getElementById("loginBtn"),
+        logoutBtn: document.getElementById("logoutBtn")
+      };
     }
 
-    function loadName() {
-      const savedName = localStorage.getItem(STORAGE.name);
-      if (!savedName) return;
-
-      const nameInput = document.getElementById("username");
-      nameInput.value = savedName;
-      nameInput.disabled = true;
-      document.getElementById("confirmBtn").style.display = "none";
+    function setAuthStatus(message, isError = false) {
+      const { authStatus } = getAuthElements();
+      authStatus.textContent = message;
+      authStatus.style.color = isError ? "#b00020" : "#222";
     }
 
-    function initSaveInputs() {
-      const inputs = document.querySelectorAll("[data-savekey]");
-      inputs.forEach(input => {
-        const key = input.dataset.savekey;
-        const saved = localStorage.getItem(key);
-        if (saved !== null) input.value = saved;
+    function updateAuthUI() {
+      const { usernameInput, registerBtn, loginBtn, logoutBtn } = getAuthElements();
+      const signedIn = !!authToken;
 
-        input.addEventListener("input", () => {
-          localStorage.setItem(key, input.value);
-        });
+      registerBtn.style.display = signedIn ? "none" : "inline-block";
+      loginBtn.style.display = signedIn ? "none" : "inline-block";
+      logoutBtn.style.display = signedIn ? "inline-block" : "none";
+
+      if (signedIn) {
+        usernameInput.value = authUsername || "";
+        setAuthStatus("Signed in as " + authUsername);
+      } else {
+        setAuthStatus("Not signed in");
+      }
+    }
+
+    function saveSessionLocally(token, username) {
+      authToken = token || "";
+      authUsername = username || "";
+      localStorage.setItem(SESSION_STORAGE.token, authToken);
+      localStorage.setItem(SESSION_STORAGE.username, authUsername);
+      updateAuthUI();
+    }
+
+    function clearSessionLocally() {
+      authToken = "";
+      authUsername = "";
+      localStorage.removeItem(SESSION_STORAGE.token);
+      localStorage.removeItem(SESSION_STORAGE.username);
+      updateAuthUI();
+    }
+
+    function restoreSessionLocally() {
+      authToken = localStorage.getItem(SESSION_STORAGE.token) || "";
+      authUsername = localStorage.getItem(SESSION_STORAGE.username) || "";
+      const { usernameInput } = getAuthElements();
+      if (authUsername) usernameInput.value = authUsername;
+      updateAuthUI();
+    }
+
+    async function apiFetch(path, options = {}) {
+      const headers = {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      };
+
+      if (authToken) {
+        headers.Authorization = "Bearer " + authToken;
+      }
+
+      const response = await fetch(WORKER_BASE_URL + path, {
+        method: options.method || "GET",
+        headers,
+        body: options.body
       });
+
+      const json = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(json.error || "Request failed");
+      }
+
+      return json;
     }
 
-    function loadHubState() {
+    function getInputSnapshot() {
+      const snapshot = {};
+      document.querySelectorAll("[data-savekey]").forEach(input => {
+        snapshot[input.dataset.savekey] = input.value || "";
+      });
+      return snapshot;
+    }
+
+    function applyInputSnapshot(snapshot) {
+      isApplyingRemoteData = true;
+      document.querySelectorAll("[data-savekey]").forEach(input => {
+        const key = input.dataset.savekey;
+        input.value = snapshot && Object.prototype.hasOwnProperty.call(snapshot, key)
+          ? (snapshot[key] ?? "")
+          : "";
+      });
+      isApplyingRemoteData = false;
+    }
+
+    function buildProgressPayload() {
+      return {
+        playerName: authUsername,
+        currentPage,
+        solvedHubPages: Array.from(solvedHubPages),
+        choiceTarget,
+        page21ShownAlready,
+        currentPdfUrl,
+        inputValues: getInputSnapshot()
+      };
+    }
+
+    function applyProgressPayload(progress) {
+      if (!progress || typeof progress !== "object") return;
+
+      applyInputSnapshot(progress.inputValues || {});
+      currentPdfUrl = progress.currentPdfUrl || null;
+
       try {
-        const savedSolved = JSON.parse(localStorage.getItem(STORAGE.solved) || "[]");
-        solvedHubPages = new Set(savedSolved.filter(n => SUB_PAGES.includes(Number(n))).map(Number));
+        solvedHubPages = new Set(
+          Array.isArray(progress.solvedHubPages)
+            ? progress.solvedHubPages.map(Number).filter(n => SUB_PAGES.includes(n))
+            : []
+        );
       } catch (e) {
         solvedHubPages = new Set();
       }
 
-      choiceTarget = localStorage.getItem(STORAGE.choice) || "";
-      page21ShownAlready = localStorage.getItem(STORAGE.page21Shown) === "1";
+      choiceTarget = progress.choiceTarget || "";
+      page21ShownAlready = !!progress.page21ShownAlready;
+
+      const pageToShow =
+        Number(progress.currentPage) >= 1 && Number(progress.currentPage) <= 24
+          ? Number(progress.currentPage)
+          : 1;
+
+      updateHubUI();
+      showPage(pageToShow);
     }
 
-    function saveHubState() {
-      localStorage.setItem(STORAGE.solved, JSON.stringify(Array.from(solvedHubPages)));
-      localStorage.setItem(STORAGE.choice, choiceTarget || "");
-      localStorage.setItem(STORAGE.page21Shown, page21ShownAlready ? "1" : "0");
+    async function registerUser() {
+      const { usernameInput, passwordInput } = getAuthElements();
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!username || !password) {
+        setAuthStatus("Enter username and password", true);
+        return;
+      }
+
+      try {
+        setAuthStatus("Registering...");
+        const result = await apiFetch("/api/register", {
+          method: "POST",
+          body: JSON.stringify({ username, password })
+        });
+
+        saveSessionLocally(result.token, result.username || username);
+        passwordInput.value = "";
+
+        if (result.saveData) {
+          applyProgressPayload(result.saveData);
+        }
+
+        setAuthStatus("Account created.");
+        queueAutoSave();
+      } catch (err) {
+        setAuthStatus(err.message || "Register failed", true);
+      }
     }
 
-function scalePage4Rect(rect) {
-  return rect;
-}
+    async function loginUser() {
+      const { usernameInput, passwordInput } = getAuthElements();
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!username || !password) {
+        setAuthStatus("Enter username and password", true);
+        return;
+      }
+
+      try {
+        setAuthStatus("Logging in...");
+        const result = await apiFetch("/api/login", {
+          method: "POST",
+          body: JSON.stringify({ username, password })
+        });
+
+        saveSessionLocally(result.token, result.username || username);
+        passwordInput.value = "";
+
+        if (result.saveData) {
+          applyProgressPayload(result.saveData);
+        } else {
+          await loadProgressFromServer();
+        }
+
+        setAuthStatus("Login successful.");
+      } catch (err) {
+        setAuthStatus(err.message || "Login failed", true);
+      }
+    }
+
+    async function loadProgressFromServer() {
+      if (!authToken) return;
+
+      try {
+        const result = await apiFetch("/api/load", {
+          method: "GET"
+        });
+
+        if (result.saveData) {
+          applyProgressPayload(result.saveData);
+        }
+
+        if (result.username) {
+          authUsername = result.username;
+          localStorage.setItem(SESSION_STORAGE.username, authUsername);
+        }
+
+        setAuthStatus("Signed in as " + authUsername);
+      } catch (err) {
+        setAuthStatus(err.message || "Could not load progress", true);
+      }
+    }
+
+    async function saveProgressToServer() {
+      if (!authToken || saveInFlight) return;
+
+      saveInFlight = true;
+
+      try {
+        await apiFetch("/api/save", {
+          method: "POST",
+          body: JSON.stringify({
+            saveData: buildProgressPayload()
+          })
+        });
+        setAuthStatus("Saved for " + authUsername);
+      } catch (err) {
+        setAuthStatus(err.message || "Save failed", true);
+      } finally {
+        saveInFlight = false;
+        if (saveQueued) {
+          saveQueued = false;
+          saveProgressToServer();
+        }
+      }
+    }
+
+    function queueAutoSave() {
+      if (isApplyingRemoteData || !authToken) return;
+
+      clearTimeout(autoSaveTimer);
+      autoSaveTimer = setTimeout(() => {
+        if (saveInFlight) {
+          saveQueued = true;
+          return;
+        }
+        saveProgressToServer();
+      }, 900);
+    }
+
+    async function logoutUser() {
+      clearTimeout(autoSaveTimer);
+
+      try {
+        if (authToken) {
+          await apiFetch("/api/logout", {
+            method: "POST",
+            body: "{}"
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+
+      clearSessionLocally();
+
+      const { passwordInput } = getAuthElements();
+      passwordInput.value = "";
+      setAuthStatus("Logged out");
+    }
+
+    function initCloudSaveInputs() {
+      const inputs = document.querySelectorAll("[data-savekey]");
+      inputs.forEach(input => {
+        input.addEventListener("input", () => {
+          queueAutoSave();
+        });
+      });
+    }
+
+    function loadHubStateDefault() {
+      solvedHubPages = new Set();
+      choiceTarget = "";
+      page21ShownAlready = false;
+    }
+
+    function scalePage4Rect(rect) {
+      return rect;
+    }
 
     function buildPage4Hub() {
       const hubLayer = document.getElementById("page4-hub");
@@ -757,6 +1051,7 @@ function scalePage4Rect(rect) {
         btn.dataset.target = pageNum;
         btn.addEventListener("click", () => {
           showPage(pageNum);
+          queueAutoSave();
         });
         hubLayer.appendChild(btn);
 
@@ -800,26 +1095,25 @@ function scalePage4Rect(rect) {
       return caseInsensitive ? value.toLowerCase() : value;
     }
 
-function validatePage3() {
+    function validatePage3() {
+      const top = (document.getElementById("page3-a1").value || "").trim();
+      const mid = (document.getElementById("page3-a2").value || "").trim().toLowerCase();
+      const bot = (document.getElementById("page3-a3").value || "").trim().toLowerCase();
 
-  const top = (document.getElementById("page3-a1").value || "").trim();
-  const mid = (document.getElementById("page3-a2").value || "").trim().toLowerCase();
-  const bot = (document.getElementById("page3-a3").value || "").trim().toLowerCase();
+      if (top === "" || mid === "" || bot === "") return false;
 
-  if (top === "" || mid === "" || bot === "") return false;
+      const midOK =
+        mid.includes("2") ||
+        mid.includes("two") ||
+        mid.includes("half");
 
-  const midOK =
-    mid.includes("2") ||
-    mid.includes("two") ||
-    mid.includes("half");
+      const botOK =
+        bot.includes("2") ||
+        bot.includes("two") ||
+        bot.includes("half");
 
-  const botOK =
-    bot.includes("2") ||
-    bot.includes("two") ||
-    bot.includes("half");
-
-  return midOK && botOK;
-}
+      return midOK && botOK;
+    }
 
     function validateHubPage(pageNum) {
       const rule = HUB_RULES[pageNum];
@@ -841,11 +1135,13 @@ function validatePage3() {
     function nextPage() {
       if (currentPage === 1) {
         showPage(2);
+        queueAutoSave();
         return;
       }
 
       if (currentPage === 2) {
         showPage(3);
+        queueAutoSave();
         return;
       }
 
@@ -855,6 +1151,7 @@ function validatePage3() {
           return;
         }
         showPage(4);
+        queueAutoSave();
         return;
       }
 
@@ -868,30 +1165,36 @@ function validatePage3() {
 
       if (!choiceTarget) {
         showPage(21);
+        queueAutoSave();
         return;
       }
 
       showPage(Number(choiceTarget));
+      queueAutoSave();
     }
 
     function prevPage() {
       if (currentPage === 2) {
         showPage(1);
+        queueAutoSave();
         return;
       }
 
       if (currentPage === 3) {
         showPage(2);
+        queueAutoSave();
         return;
       }
 
       if (currentPage === 4) {
         showPage(3);
+        queueAutoSave();
         return;
       }
 
       if ([21,22,23,24].includes(currentPage)) {
         showPage(4);
+        queueAutoSave();
       }
     }
 
@@ -907,14 +1210,14 @@ function validatePage3() {
 
       const wasAlreadySolved = solvedHubPages.has(currentPage);
       solvedHubPages.add(currentPage);
-      saveHubState();
       updateHubUI();
+      queueAutoSave();
 
       const justReachedTen = !wasAlreadySolved && solvedHubCount() >= 10 && !page21ShownAlready;
 
       if (justReachedTen) {
         page21ShownAlready = true;
-        saveHubState();
+        queueAutoSave();
         showPage(21);
         return;
       }
@@ -993,13 +1296,13 @@ function validatePage3() {
     function initPage21Choices() {
       document.getElementById("page21-left-choice").addEventListener("click", () => {
         choiceTarget = "23";
-        saveHubState();
+        queueAutoSave();
         showPage(4);
       });
 
       document.getElementById("page21-right-choice").addEventListener("click", () => {
         choiceTarget = "22";
-        saveHubState();
+        queueAutoSave();
         showPage(4);
       });
     }
@@ -1063,6 +1366,7 @@ function validatePage3() {
         }
 
         status.style.display = "none";
+        queueAutoSave();
       } catch (err) {
         console.error("PDF.js render error:", err);
         status.textContent = "Failed to load PDF (see Console).";
@@ -1191,22 +1495,33 @@ function validatePage3() {
       });
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-      loadName();
-      loadHubState();
-      initSaveInputs();
+    document.addEventListener("DOMContentLoaded", async function () {
+      restoreSessionLocally();
+      loadHubStateDefault();
+
       buildPage4Hub();
       initPage21Choices();
       initFinalCodeInputs();
-
       initPdfJs();
       initSecondCanvasHotspots();
       initOpenFileButton();
-
       initTranslatorWidget();
       initTranslationScreenshotTool();
+      initCloudSaveInputs();
+
+      document.getElementById("registerBtn").addEventListener("click", registerUser);
+      document.getElementById("loginBtn").addEventListener("click", loginUser);
+      document.getElementById("logoutBtn").addEventListener("click", logoutUser);
 
       showPage(1);
+
+      if (authToken) {
+        try {
+          await loadProgressFromServer();
+        } catch (err) {
+          console.error(err);
+        }
+      }
     });
   </script>
 
