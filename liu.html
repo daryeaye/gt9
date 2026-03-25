@@ -661,6 +661,7 @@
     const INTRO_URL = "https://youtu.be/F8paV80TGac";
     const FINAL_UNLOCK_URL = "https://daryeaye.github.io/gt9/zach.html";
     const WORKER_BASE_URL = "https://geotopia-powerfall-auth-api.daryeaye.workers.dev";
+    const APP_ID = "powerfall-pt2";
 
     const SESSION_STORAGE = {
       token: "gt9_auth_token",
@@ -884,7 +885,7 @@
         setAuthStatus("Registering...");
         const result = await apiFetch("/api/register", {
           method: "POST",
-          body: JSON.stringify({ username, password })
+          body: JSON.stringify({ username, password, appId: APP_ID })
         });
 
         saveSessionLocally(result.token, result.username || username);
@@ -915,7 +916,7 @@
         setAuthStatus("Logging in...");
         const result = await apiFetch("/api/login", {
           method: "POST",
-          body: JSON.stringify({ username, password })
+          body: JSON.stringify({ username, password, appId: APP_ID })
         });
 
         saveSessionLocally(result.token, result.username || username);
@@ -937,7 +938,7 @@
       if (!authToken) return;
 
       try {
-        const result = await apiFetch("/api/load", {
+const result = await apiFetch("/api/load?appId=" + encodeURIComponent(APP_ID), {
           method: "GET"
         });
 
@@ -965,6 +966,7 @@
         await apiFetch("/api/save", {
           method: "POST",
           body: JSON.stringify({
+            appId: APP_ID,
             saveData: buildProgressPayload()
           })
         });
