@@ -1558,6 +1558,9 @@ const result = await apiFetch("/api/load?appId=" + encodeURIComponent(APP_ID), {
 let tutorialIndex = 0;
 
 function showTutorial() {
+  const alreadySeen = localStorage.getItem("gt10_tutorial_seen");
+  if (alreadySeen === "yes") return;
+
   const overlay = document.getElementById("tutorialOverlay");
   const img = document.getElementById("tutorialImage");
 
@@ -1574,6 +1577,7 @@ function nextTutorialSlide() {
 
   if (tutorialIndex >= TUTORIAL_IMAGES.length) {
     overlay.style.display = "none";
+    localStorage.setItem("gt10_tutorial_seen", "yes");
     return;
   }
 
