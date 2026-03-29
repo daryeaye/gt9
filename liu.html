@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1500,6 +1499,8 @@ const result = await apiFetch("/api/load?appId=" + encodeURIComponent(APP_ID), {
         input.addEventListener("input", () => {
           if (input.value.trim() === "fe" && input.dataset.done !== "1") {
             input.dataset.done = "1";
+            input.value = "";
+            queueAutoSave();
             window.open(FINAL_UNLOCK_URL, "_blank");
           }
         });
