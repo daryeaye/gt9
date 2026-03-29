@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Geotopia Powerfall Pt2</title>
+  <title>Geotopia Powerfall Pt1</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet" />
@@ -63,433 +63,62 @@
   background: rgba(255,255,255,0.96);
 }
     
-    html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      overflow-y: auto;
-      background: url('https://daryeaye.github.io/geotopia/thatsit.png') no-repeat center center fixed;
-      background-size: cover;
-    }
+    .hotspot.resetBtn{display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;line-height:1;}
+    html, body {margin:0;padding:0;min-height:100vh;overflow-y:auto;background:url('https://daryeaye.github.io/geotopia/thatsit.png') no-repeat center center fixed;background-size:cover;}
+    body {display:flex;justify-content:center;align-items:flex-start;padding:10px 0 40px;box-sizing:border-box;font-family:Arial,sans-serif;}
+    #app-container {display:flex;flex-direction:column;align-items:center;width:100%;}
+    #header {width:960px;background:#eee;padding:10px;margin-bottom:10px;display:flex;flex-direction:column;gap:8px;position:sticky;top:0;z-index:2000;box-shadow:0 2px 6px rgba(0,0,0,0.12);box-sizing:border-box;}
+    #topAuthRow,#progressRow {display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;box-sizing:border-box;}
+    #topAuthLeft {display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    #student-username,#student-password {font-size:16px;padding:5px 8px;width:150px;box-sizing:border-box;}
+    #registerBtn,#loginBtn,#logoutBtn,#introBtn,#openFileBtn,#prev-btn,#next-btn,#collapse-widget,#side-widget button:not(#collapse-widget) {font-family:"Love Ya Like A Sister", cursive;}
+    #registerBtn,#loginBtn,#logoutBtn,#introBtn {font-size:22px;padding:6px 12px;cursor:pointer;background-color:lightblue;border:none;line-height:1;border-radius:6px;}
+    #authStatus {font-size:15px;font-family:"Comic Sans MS", sans-serif;color:#222;min-width:150px;}
+    #progressBar {flex:1;background:#ccc;height:20px;margin:0 10px 0 0;position:relative;}
+    #progress {background:green;height:100%;width:0%;}
+    #progressText {font-size:16px;white-space:nowrap;}
+    #saveStatus {font-size:13px;color:#444;min-width:120px;text-align:right;}
+    #main-area {width:100%;display:flex;justify-content:center;}
+    #main-wrapper {position:relative;width:960px;}
+    #container {position:relative;width:960px;height:540px;border:1px solid #ccc;background:white;overflow:hidden;}
+    .page {position:absolute;top:0;left:0;width:960px;height:540px;display:none;}
+    .page.active {display:block;}
+    .textbox {position:absolute;background-color:rgba(255,255,224,0.7);border:1px solid black;font-family:"Comic Sans MS",sans-serif;font-size:20px;color:black;padding:2px 6px;box-sizing:border-box;z-index:30;}
+    .drawingCanvas {position:absolute;left:0;top:0;z-index:10;cursor:crosshair;}
+    .hotspot{position:absolute;z-index:9999;background:rgba(173,216,230,0.95);border:2px solid #000;border-radius:8px;color:#000;font-family:"Comic Sans MS",sans-serif;font-size:18px;}
+    #nav-buttons {position:absolute;top:50%;left:-150px;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:3000;}
+    button {font-family:"Comic Sans MS",sans-serif;font-size:20px;background-color:lightblue;border:none;padding:10px 20px;margin:0;cursor:pointer;}
+    .invisible-choice{background:transparent !important;border:none !important;}
+    #side-widget {position:fixed;top:20px;right:20px;width:200px;height:200px;background:#f9f9f9;border:1px solid #ccc;padding:10px;box-sizing:border-box;font-family:'Caveat',cursive;z-index:999;transition:all 0.25s ease;}
+    #side-widget.collapsed {width:120px;height:24px;padding:0;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(249,249,249,0.95);border:1px solid #ccc;font-family:"Comic Sans MS",sans-serif;font-size:8px;line-height:1;white-space:nowrap;}
+    #side-widget.collapsed * {display:none !important;}
+    #side-widget.collapsed::after {content:"Translation";}
+    #collapse-widget {position:absolute;top:6px;right:6px;width:22px;height:22px;padding:0;line-height:1;font-size:14px;background:lightblue;border:none;border-radius:6px;cursor:pointer;font-family:"Comic Sans MS",sans-serif;}
+    #side-widget p.title {font-size:24px;text-align:center;margin:0 0 10px;}
+    #side-widget button:not(#collapse-widget) {display:block;margin:0 auto;font-size:20px;cursor:pointer;text-align:center;background:lightblue;border:none;padding:10px;font-family:"Comic Sans MS",sans-serif;}
+    #side-widget a {display:block;margin:0 auto;font-size:14px;cursor:pointer;text-align:center;background:lightblue;border:none;padding:6px;text-decoration:none;color:inherit;font-family:"Comic Sans MS",sans-serif;}
+    #selection-overlay {position:fixed;top:0;left:0;width:100%;height:100%;cursor:crosshair;z-index:1000;}
+    #selection-box {position:absolute;border:2px dashed red;background:rgba(0, 0, 0, 0.1);}
+    #role-container {position:relative;width:960px;height:540px;border:1px solid #ccc;box-sizing:border-box;margin-top:10px;overflow:hidden;background:#fff;}
+    #role-stage {position:absolute;top:0;left:0;width:1600px;height:900px;transform-origin:top left;transform:scale(0.6);background:url('https://daryeaye.github.io/geotopia/role.jpg') no-repeat center/cover;}
+    .role-hotspot {position:absolute;background:rgba(255,0,0,0);border:none;padding:0;margin:0;cursor:pointer;}
+    #pdfViewer {position:absolute;inset:0;display:none;overflow-y:auto;overflow-x:hidden;background:#fff;z-index:5;}
+    .pdfPageCanvas {display:block;margin:12px auto;background:white;}
+    #pdfStatus {position:absolute;top:10px;left:10px;font-family:"Comic Sans MS",sans-serif;font-size:14px;color:#111;background:rgba(255,255,255,0.85);padding:6px 10px;border:1px solid rgba(0,0,0,0.15);border-radius:6px;z-index:10;display:none;}
+    #role-container.pdf-mode #role-stage {display:none;}
+    #openFileWrap {width:960px;text-align:center;margin-top:10px;}
+    #openFileBtn {font-size:16px;padding:8px 16px;background:lightblue;border:none;cursor:pointer;border-radius:6px;line-height:1;}
 
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 10px 0 40px;
-      box-sizing: border-box;
-    }
-
-    #app-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-    }
-
-    #header {
-      width: 960px;
-      background: #eee;
-      padding: 10px;
-      margin-bottom: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      position: sticky;
-      top: 0;
-      z-index: 2000;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-      box-sizing: border-box;
-    }
-
-    #topAuthRow,
-    #progressRow {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    #topAuthLeft {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    #student-username,
-    #student-password {
-      font-size: 16px;
-      padding: 5px 8px;
-      width: 150px;
-      box-sizing: border-box;
-    }
-
-    #registerBtn,
-    #loginBtn,
-    #logoutBtn,
-    #introBtn,
-    #openFileBtn,
-    #prev-btn,
-    #next-btn,
-    #check-btn,
-    #collapse-widget,
-    #side-widget button:not(#collapse-widget) {
-      font-family: "Love Ya Like A Sister", cursive;
-    }
-
-    #registerBtn,
-    #loginBtn,
-    #logoutBtn,
-    #introBtn {
-      font-size: 22px;
-      padding: 6px 12px;
-      cursor: pointer;
-      background-color: lightblue;
-      border: none;
-      line-height: 1;
-      border-radius: 6px;
-    }
-
-    #authStatus {
-      font-size: 15px;
-      font-family: "Comic Sans MS", sans-serif;
-      color: #222;
-      min-width: 150px;
-    }
-
-    #progressBar {
-      flex: 1;
-      background: #ccc;
-      height: 20px;
-      margin: 0 10px 0 0;
-      position: relative;
-    }
-
-    #progress {
-      background: green;
-      height: 100%;
-      width: 0%;
-    }
-
-    #progressText {
-      font-size: 16px;
-      white-space: nowrap;
-    }
-
-    #main-area {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-
-    #main-wrapper {
-      position: relative;
-      width: 960px;
-    }
-
-    #container {
-      position: relative;
-      width: 960px;
-      height: 540px;
-      border: 1px solid #ccc;
-      background: white;
-      overflow: hidden;
-    }
-
-    .page {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 960px;
-      height: 540px;
-      display: none;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 100% 100%;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    .textbox,
-    .workbox {
-      position: absolute;
-      background-color: rgba(255, 255, 224, 0.72);
-      border: 1px solid black;
-      font-family: "Comic Sans MS", sans-serif;
-      font-size: 20px;
-      color: black;
-      padding: 4px 6px;
-      box-sizing: border-box;
-      z-index: 30;
-    }
-
-    .workbox {
-      resize: none;
-      overflow: auto;
-    }
-
-    .hub-hotspot,
-    .choice-hotspot {
-      position: absolute;
-      background: transparent !important;
-      border: none !important;
-      padding: 0;
-      margin: 0;
-      cursor: pointer;
-      z-index: 40;
-    }
-
-    .checkmark {
-      position: absolute;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      font-size: 42px;
-      z-index: 45;
-      pointer-events: none;
-      text-shadow: 0 2px 4px rgba(255,255,255,0.95);
-    }
-
-    #page4-next-overlay {
-      position: absolute;
-      left: 237px;
-      top: 358px;
-      width: 477px;
-      height: 103px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(173, 216, 230, 0.5);
-      border: 2px solid rgba(0,0,0,0.25);
-      color: #000;
-      font-family: "Love Ya Like A Sister", cursive;
-      font-size: 48px;
-      line-height: 1;
-      cursor: pointer;
-      z-index: 60;
-    }
-
-    #nav-buttons {
-      position: absolute;
-      top: 50%;
-      left: -175px;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 3000;
-      width: 165px;
-    }
-
-    #nav-buttons button {
-      width: 165px;
-      font-size: 30px;
-      background-color: lightblue;
-      border: none;
-      padding: 12px 10px;
-      margin: 0;
-      cursor: pointer;
-      line-height: 1;
-      display: none;
-      border-radius: 6px;
-    }
-
-    #check-btn {
-      font-size: 28px !important;
-      padding: 14px 8px !important;
-    }
-
-    #side-widget {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 200px;
-      height: 200px;
-      background: #f9f9f9;
-      border: 1px solid #ccc;
-      padding: 10px;
-      box-sizing: border-box;
-      font-family: 'Caveat', cursive;
-      z-index: 999;
-      transition: all 0.25s ease;
-    }
-
-    #side-widget.collapsed {
-      width: 120px;
-      height: 24px;
-      padding: 0;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      background: rgba(249, 249, 249, 0.95);
-      border: 1px solid #ccc;
-      font-family: "Comic Sans MS", sans-serif;
-      font-size: 8px;
-      line-height: 1;
-      white-space: nowrap;
-    }
-
-    #side-widget.collapsed * {
-      display: none !important;
-    }
-
-    #side-widget.collapsed::after {
-      content: "Translation";
-    }
-
-    #collapse-widget {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      width: 22px;
-      height: 22px;
-      padding: 0;
-      line-height: 1;
-      font-size: 14px;
-      background: lightblue;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    #side-widget p.title {
-      font-size: 24px;
-      text-align: center;
-      margin: 0 0 10px;
-    }
-
-    #side-widget button:not(#collapse-widget) {
-      display: block;
-      margin: 0 auto;
-      font-size: 20px;
-      cursor: pointer;
-      text-align: center;
-      background: lightblue;
-      border: none;
-      padding: 10px;
-    }
-
-    #side-widget a {
-      display: block;
-      margin: 0 auto;
-      font-size: 14px;
-      cursor: pointer;
-      text-align: center;
-      background: lightblue;
-      border: none;
-      padding: 6px;
-      text-decoration: none;
-      color: inherit;
-      font-family: "Comic Sans MS", sans-serif;
-    }
-
-    #selection-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      cursor: crosshair;
-      z-index: 1000;
-    }
-
-    #selection-box {
-      position: absolute;
-      border: 2px dashed red;
-      background: rgba(0, 0, 0, 0.1);
-    }
-
-    #role-container {
-      position: relative;
-      width: 960px;
-      height: 540px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-      margin-top: 10px;
-      overflow: hidden;
-      background: #fff;
-    }
-
-    #role-stage {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 1600px;
-      height: 900px;
-      transform-origin: top left;
-      transform: scale(0.6);
-      background: url('https://daryeaye.github.io/geotopia/role.jpg') no-repeat center/cover;
-    }
-
-    .role-hotspot {
-      position: absolute;
-      background: rgba(255,0,0,0);
-      border: none;
-      padding: 0;
-      margin: 0;
-      cursor: pointer;
-    }
-
-    #pdfViewer {
-      position: absolute;
-      inset: 0;
-      display: none;
-      overflow-y: auto;
-      overflow-x: hidden;
-      background: #fff;
-      z-index: 5;
-    }
-
-    .pdfPageCanvas {
-      display: block;
-      margin: 12px auto;
-      background: white;
-    }
-
-    #pdfStatus {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      font-family: "Comic Sans MS", sans-serif;
-      font-size: 14px;
-      color: #111;
-      background: rgba(255,255,255,0.85);
-      padding: 6px 10px;
-      border: 1px solid rgba(0,0,0,0.15);
-      border-radius: 6px;
-      z-index: 10;
-      display: none;
-    }
-
-    #role-container.pdf-mode #role-stage {
-      display: none;
-    }
-
-    #openFileWrap {
-      width: 960px;
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    #openFileBtn {
-      font-size: 20px;
-      padding: 8px 16px;
-      background: lightblue;
-      border: none;
-      cursor: pointer;
-      border-radius: 6px;
-      line-height: 1;
-    }
+    .animation-window {position:absolute;left:144px;top:8px;width:672px;height:418px;overflow:hidden;background:#fff;}
+    .animation-window iframe {position:absolute;left:2px;top:0;width:800px;height:500px;border:none;transform:scale(0.836);transform-origin:top left;}
+    #customPopupOverlay {position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:11000;display:none;align-items:center;justify-content:center;}
+    #customPopupBox {background:#fffdf7;padding:24px 28px;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,0.35);min-width:320px;max-width:min(420px,88vw);text-align:center;border:3px solid #000;}
+    #customPopupText {font-family:"Comic Sans MS",sans-serif;font-size:24px;line-height:1.35;margin-bottom:18px;color:#111;}
+    #customPopupButtons {display:flex;justify-content:center;gap:16px;flex-wrap:wrap;}
+    #customPopupButtons button {min-width:110px;border-radius:10px;border:2px solid #000;}
+    #pageTransitionOverlay {position:absolute;inset:0;background:#000;z-index:10050;opacity:0;pointer-events:none;transition:opacity 0.3s ease;}
   </style>
 </head>
-
 <body>
   <div id="app-container">
     <div id="header">
@@ -498,216 +127,169 @@
           <input type="text" id="student-username" placeholder="Username" autocomplete="username" />
           <input type="password" id="student-password" placeholder="Password" autocomplete="current-password" />
           <button id="registerBtn" type="button">Register</button>
-          <button id="loginBtn" type="button">Login</button>
-          <button id="logoutBtn" type="button">Logout</button>
+          <button id="loginBtn" type="button">Log In</button>
+          <button id="logoutBtn" type="button" style="display:none;">Log Out</button>
           <button id="introBtn" type="button" onclick="openIntro()">Intro</button>
-          <span id="authStatus">Not signed in</span>
         </div>
+        <div id="authStatus">Not logged in</div>
       </div>
 
       <div id="progressRow">
-        <div id="progressBar">
-          <div id="progress"></div>
-        </div>
+        <div id="progressBar"><div id="progress"></div></div>
         <span id="progressText">0% completed</span>
+        <span id="saveStatus">Not saved yet</span>
       </div>
     </div>
 
     <div id="main-area">
       <div id="main-wrapper">
         <div id="nav-buttons">
-          <button id="prev-btn" type="button" onclick="prevPage()">Previous</button>
-          <button id="next-btn" type="button" onclick="nextPage()">Next</button>
-          <button id="check-btn" type="button" onclick="checkCurrentHubAnswer()">Check My Answer</button>
+          <button id="prev-btn" onclick="prevPage()">Previous</button>
+          <button id="next-btn" onclick="nextPage()">Next</button>
         </div>
 
         <div id="container">
-          <div id="page1" class="page active" style="background-image:url('https://daryeaye.github.io/gt9/9-01.jpg');"></div>
-
-          <div id="page2" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-02.jpg');"></div>
-
-          <div id="page3" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-03.jpg');">
-            <input id="page3-a1" type="text" class="textbox" data-savekey="gt9-p3-a1" spellcheck="false"
-              style="left:445px; top:189px; width:488px; height:78px;" />
-            <input id="page3-a2" type="text" class="textbox" data-savekey="gt9-p3-a2" spellcheck="false"
-              style="left:445px; top:314px; width:488px; height:78px;" />
-            <input id="page3-a3" type="text" class="textbox" data-savekey="gt9-p3-a3" spellcheck="false"
-              style="left:445px; top:434px; width:488px; height:78px;" />
+          <div id="page1" class="page active" style="background:url('https://daryeaye.github.io/gt8/8-01.jpg') no-repeat center/cover;"></div>
+          <div id="page2" class="page" style="background:url('https://daryeaye.github.io/gt8/8-02.jpg') no-repeat center/cover;"></div>
+          <div id="page3" class="page" style="background:url('https://daryeaye.github.io/gt8/8-03.jpg') no-repeat center/cover;">
+            <input type="text" class="textbox cloud-input" data-savekey="p3-1" style="left:858px; top:146px; width:78px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p3-2" style="left:697px; top:191px; width:96px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p3-3" style="left:730px; top:232px; width:78px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p3-4" style="left:847px; top:232px; width:92px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p3-5" style="left:744px; top:319px; width:78px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p3-6" style="left:546px; top:407px; width:140px; height:34px;">
           </div>
-
-          <div id="page4" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-04.jpg');">
-            <div id="page4-hub"></div>
-            <div id="page4-checkmarks"></div>
-            <button id="page4-next-overlay" type="button">Next</button>
+          <div id="page4" class="page" style="background:url('https://daryeaye.github.io/gt8/8-04.jpg') no-repeat center/cover;">
+            <canvas id="draw4" class="drawingCanvas" width="960" height="540"></canvas>
+            <button id="reset4" class="hotspot resetBtn" style="left:768px; top:448px; width:148px; height:36px;">Reset</button>
           </div>
-
-          <div id="page5" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-05.jpg');">
-            <input id="page5-main" type="text" class="textbox" data-savekey="gt9-p5-main" spellcheck="false"
-              style="left:301px; top:330px; width:356px; height:81px;" />
+          <div id="page5" class="page" style="background:url('https://daryeaye.github.io/gt8/8-05.jpg') no-repeat center/cover;">
+            <input type="text" class="textbox cloud-input" data-savekey="p5-1" style="left:99px; top:317px; width:52px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p5-2" style="left:264px; top:317px; width:52px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p5-63" style="left:102px; top:357px; width:158px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p5-3" style="left:771px; top:68px; width:158px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p5-4" style="left:676px; top:106px; width:52px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p5-5" style="left:841px; top:106px; width:52px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p5-72" style="left:676px; top:145px; width:157px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p5-6" style="left:759px; top:210px; width:52px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p5-7" style="left:777px; top:252px; width:52px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p5-42" style="left:759px; top:295px; width:158px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p5-8" style="left:793px; top:396px; width:158px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p5-9" style="left:665px; top:431px; width:52px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p5-10" style="left:817px; top:432px; width:52px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p5-112" style="left:644px; top:471px; width:157px; height:33px;">
           </div>
-
-          <div id="page6" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-06.jpg');">
-            <input id="page6-main" type="text" class="textbox" data-savekey="gt9-p6-main" spellcheck="false"
-              style="left:301px; top:330px; width:356px; height:81px;" />
+          <div id="page5ex" class="page" style="background:url('https://daryeaye.github.io/gt8/8-05ex.jpg') no-repeat center/cover;">
+            <div class="animation-window">
+              <iframe src="https://daryeaye.github.io/gt8/tri.html" title="Triangle animation"></iframe>
+            </div>
           </div>
-
-          <div id="page7" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-07.jpg');">
-            <input id="page7-main" type="text" class="textbox" data-savekey="gt9-p7-main" spellcheck="false"
-              style="left:301px; top:330px; width:356px; height:81px;" />
+          <div id="page6" class="page" style="background:url('https://daryeaye.github.io/gt8/8-06.jpg') no-repeat center/cover;">
+            <canvas id="draw6" class="drawingCanvas" width="960" height="540"></canvas>
+            <button id="reset6" class="hotspot resetBtn" style="left:768px; top:448px; width:148px; height:36px;">Reset</button>
           </div>
-
-          <div id="page8" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-08.jpg');">
-            <textarea id="page8-work" class="workbox" data-savekey="gt9-p8-work" spellcheck="false"
-              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
-            <input id="page8-answer" type="text" class="textbox" data-savekey="gt9-p8-answer" spellcheck="false"
-              style="left:648px; top:414px; width:111px; height:36px;" />
+          <div id="page7" class="page" style="background:url('https://daryeaye.github.io/gt8/8-07.jpg') no-repeat center/cover;">
+            <input type="text" class="textbox cloud-input" data-savekey="p7-1" style="left:51px; top:52px; width:158px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p7-2" style="left:85px; top:95px; width:53px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p7-3" style="left:250px; top:95px; width:53px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p7-40" style="left:89px; top:137px; width:158px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p7-4" style="left:678px; top:90px; width:158px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p7-5" style="left:708px; top:130px; width:53px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p7-6" style="left:871px; top:130px; width:53px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p7-17.5" style="left:708px; top:171px; width:158px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p7-9" style="left:742px; top:288px; width:53px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p7-10" style="left:760px; top:327px; width:53px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p7-120" style="left:742px; top:367px; width:158px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p7-7" style="left:90px; top:329px; width:53px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p7-8" style="left:107px; top:367px; width:53px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p7-30" style="left:97px; top:407px; width:158px; height:34px;">
           </div>
-
-          <div id="page9" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-09.jpg');">
-            <textarea id="page9-work" class="workbox" data-savekey="gt9-p9-work" spellcheck="false"
-              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
-            <input id="page9-answer" type="text" class="textbox" data-savekey="gt9-p9-answer" spellcheck="false"
-              style="left:648px; top:414px; width:111px; height:36px;" />
+          <div id="page7ex" class="page" style="background:url('https://daryeaye.github.io/gt8/8-07ex.jpg') no-repeat center/cover;">
+            <div class="animation-window">
+              <iframe src="https://daryeaye.github.io/gt8/trap.html" title="Trapezoid animation"></iframe>
+            </div>
           </div>
-
-          <div id="page10" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-10.jpg');">
-            <textarea id="page10-work" class="workbox" data-savekey="gt9-p10-work" spellcheck="false"
-              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
-            <input id="page10-answer" type="text" class="textbox" data-savekey="gt9-p10-answer" spellcheck="false"
-              style="left:648px; top:414px; width:111px; height:36px;" />
+          <div id="page8" class="page" style="background:url('https://daryeaye.github.io/gt8/8-08.jpg') no-repeat center/cover;">
+            <canvas id="draw8" class="drawingCanvas" width="960" height="540"></canvas>
+            <button id="reset8" class="hotspot resetBtn" style="left:768px; top:448px; width:148px; height:36px;">Reset</button>
           </div>
-
-          <div id="page11" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-11.jpg');">
-            <textarea id="page11-work" class="workbox" data-savekey="gt9-p11-work" spellcheck="false"
-              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
-            <input id="page11-answer" type="text" class="textbox" data-savekey="gt9-p11-answer" spellcheck="false"
-              style="left:648px; top:414px; width:111px; height:36px;" />
+          <div id="page9" class="page" style="background:url('https://daryeaye.github.io/gt8/8-09.jpg') no-repeat center/cover;">
+            <input type="text" class="textbox cloud-input" data-savekey="p9-1" style="left:84px; top:19px; width:52px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p9-2" style="left:247px; top:19px; width:52px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p9-40.5" style="left:84px; top:61px; width:158px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p9-3" style="left:776px; top:94px; width:52px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p9-4" style="left:776px; top:133px; width:52px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p9-5" style="left:776px; top:177px; width:52px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p9-30" style="left:758px; top:214px; width:158px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p9-6" style="left:92px; top:279px; width:52px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p9-148" style="left:75px; top:320px; width:158px; height:33px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p9-7" style="left:698px; top:418px; width:52px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p9-8" style="left:863px; top:418px; width:52px; height:34px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p9-50" style="left:698px; top:460px; width:158px; height:33px;">
           </div>
-
-          <div id="page12" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-12.jpg');">
-            <textarea id="page12-work" class="workbox" data-savekey="gt9-p12-work" spellcheck="false"
-              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
-            <input id="page12-answer" type="text" class="textbox" data-savekey="gt9-p12-answer" spellcheck="false"
-              style="left:648px; top:414px; width:111px; height:36px;" />
+          <div id="page10" class="page" style="background:url('https://daryeaye.github.io/gt8/8-10.jpg') no-repeat center/cover;"></div>
+          <div id="page11" class="page" style="background:url('https://daryeaye.github.io/gt8/8-11.jpg') no-repeat center/cover;">
+            <input type="text" class="textbox cloud-input" data-savekey="p11-1" style="left:522px; top:160px; width:401px; height:66px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p11-2" style="left:519px; top:260px; width:401px; height:65px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p11-3" style="left:522px; top:355px; width:401px; height:66px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p11-141" style="left:656px; top:427px; width:267px; height:66px;">
+            <canvas id="draw11" class="drawingCanvas" width="480" height="540" style="left:0px; top:0px;"></canvas>
+            <button id="reset11" class="hotspot resetBtn" style="left:20px; top:480px; width:120px; height:36px;">Reset</button>
           </div>
-
-          <div id="page13" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-13.jpg');">
-            <textarea id="page13-work" class="workbox" data-savekey="gt9-p13-work" spellcheck="false"
-              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
-            <input id="page13-answer" type="text" class="textbox" data-savekey="gt9-p13-answer" spellcheck="false"
-              style="left:648px; top:414px; width:111px; height:36px;" />
+          <div id="page12" class="page" style="background:url('https://daryeaye.github.io/gt8/8-12.jpg') no-repeat center/cover;">
+            <input type="text" class="textbox cloud-input" data-savekey="p12-1" style="left:522px; top:160px; width:401px; height:66px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p12-2" style="left:519px; top:260px; width:401px; height:65px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p12-3" style="left:522px; top:355px; width:401px; height:66px;">
+            <input type="text" class="textbox cloud-input" data-savekey="p12-138" style="left:656px; top:427px; width:267px; height:66px;">
+            <canvas id="draw12" class="drawingCanvas" width="480" height="540" style="left:0px; top:0px;"></canvas>
+            <button id="reset12" class="hotspot resetBtn" style="left:20px; top:480px; width:120px; height:36px;">Reset</button>
           </div>
-
-          <div id="page14" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-14.jpg');">
-            <textarea id="page14-work" class="workbox" data-savekey="gt9-p14-work" spellcheck="false"
-              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
-            <input id="page14-answer" type="text" class="textbox" data-savekey="gt9-p14-answer" spellcheck="false"
-              style="left:648px; top:414px; width:111px; height:36px;" />
+          <div id="page13" class="page" style="background:url('https://daryeaye.github.io/gt8/8-13.jpg') no-repeat center/cover;">
+            <button id="choice-to-15" class="hotspot invisible-choice" aria-label="Choose path to Page 15" style="left:301px; top:344px; width:125px; height:85px;"></button>
+            <button id="choice-to-16" class="hotspot invisible-choice" aria-label="Choose path to Page 16" style="left:513px; top:344px; width:125px; height:85px;"></button>
           </div>
-
-          <div id="page15" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-15.jpg');">
-            <textarea id="page15-work" class="workbox" data-savekey="gt9-p15-work" spellcheck="false"
-              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
-            <input id="page15-answer" type="text" class="textbox" data-savekey="gt9-p15-answer" spellcheck="false"
-              style="left:648px; top:414px; width:111px; height:36px;" />
+          <div id="page14" class="page" style="background:url('https://daryeaye.github.io/gt8/8-14.jpg') no-repeat center/cover;">
+            <input type="text" class="textbox cloud-input" data-savekey="p14-114" style="left:534px; top:145px; width:371px; height:348px;">
           </div>
-
-          <div id="page16" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-16.jpg');">
-            <textarea id="page16-work" class="workbox" data-savekey="gt9-p16-work" spellcheck="false"
-              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
-            <input id="page16-answer" type="text" class="textbox" data-savekey="gt9-p16-answer" spellcheck="false"
-              style="left:648px; top:414px; width:111px; height:36px;" />
+          <div id="page15" class="page" style="background:url('https://daryeaye.github.io/gt8/8-15.jpg') no-repeat center/cover;">
+            <input type="text" class="textbox cloud-input" data-savekey="p15-ki" style="left:557px; top:423px; width:268px; height:51px;">
           </div>
-
-          <div id="page17" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-17.jpg');">
-            <textarea id="page17-work" class="workbox" data-savekey="gt9-p17-work" spellcheck="false"
-              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
-            <input id="page17-answer" type="text" class="textbox" data-savekey="gt9-p17-answer" spellcheck="false"
-              style="left:648px; top:414px; width:111px; height:36px;" />
+          <div id="page16" class="page" style="background:url('https://daryeaye.github.io/gt8/8-16.jpg') no-repeat center/cover;">
+            <input type="text" class="textbox cloud-input" data-savekey="p16-ki" style="left:136px; top:351px; width:268px; height:51px;">
           </div>
-
-          <div id="page18" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-18.jpg');">
-            <textarea id="page18-work" class="workbox" data-savekey="gt9-p18-work" spellcheck="false"
-              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
-            <input id="page18-answer" type="text" class="textbox" data-savekey="gt9-p18-answer" spellcheck="false"
-              style="left:648px; top:414px; width:111px; height:36px;" />
-          </div>
-
-          <div id="page19" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-19.jpg');">
-            <textarea id="page19-work" class="workbox" data-savekey="gt9-p19-work" spellcheck="false"
-              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
-            <input id="page19-answer" type="text" class="textbox" data-savekey="gt9-p19-answer" spellcheck="false"
-              style="left:648px; top:414px; width:111px; height:36px;" />
-          </div>
-
-          <div id="page20" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-20.jpg');">
-            <textarea id="page20-work" class="workbox" data-savekey="gt9-p20-work" spellcheck="false"
-              style="left:553px; top:195px; width:309px; height:167px;"></textarea>
-            <input id="page20-answer" type="text" class="textbox" data-savekey="gt9-p20-answer" spellcheck="false"
-              style="left:648px; top:414px; width:111px; height:36px;" />
-          </div>
-
-          <div id="page21" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-21.jpg');">
-            <button class="choice-hotspot" id="page21-left-choice" type="button"
-              style="left:294px; top:331px; width:133px; height:95px;"></button>
-            <button class="choice-hotspot" id="page21-right-choice" type="button"
-              style="left:507px; top:331px; width:133px; height:95px;"></button>
-          </div>
-
-          <div id="page22" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-22.jpg');">
-            <input id="page22-code" type="text" class="textbox" data-savekey="gt9-p22-code" spellcheck="false"
-              style="left:548px; top:411px; width:262px; height:49px;" />
-          </div>
-
-          <div id="page23" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-23.jpg');">
-            <input id="page23-code" type="text" class="textbox" data-savekey="gt9-p23-code" spellcheck="false"
-              style="left:123px; top:420px; width:267px; height:50px;" />
-          </div>
-
-          <div id="page24" class="page" style="background-image:url('https://daryeaye.github.io/gt9/9-24.jpg');"></div>
+          <div id="pageTransitionOverlay"></div>
         </div>
       </div>
     </div>
 
     <div id="role-container" aria-label="Role selection canvas">
       <div id="pdfStatus">Loading PDF...</div>
-
       <div id="role-stage">
-        <button class="role-hotspot" id="hotspot-officer"
-          style="left:195px; top:121px; width:328px; height:276px;"
-          aria-label="Officer" title="Officer"></button>
-
-        <button class="role-hotspot" id="hotspot-professor"
-          style="left:637px; top:121px; width:328px; height:277px;"
-          aria-label="Professor" title="Professor"></button>
-
-        <button class="role-hotspot" id="hotspot-hacker"
-          style="left:1079px; top:121px; width:328px; height:277px;"
-          aria-label="Hacker" title="Hacker"></button>
-
-        <button class="role-hotspot" id="hotspot-video"
-          style="left:502px; top:767px; width:596px; height:51px;"
-          aria-label="What is the file for?" title="What is the file for?"></button>
+        <button class="role-hotspot" id="hotspot-officer" style="left:195px; top:121px; width:328px; height:276px;" aria-label="Officer" title="Officer"></button>
+        <button class="role-hotspot" id="hotspot-professor" style="left:637px; top:121px; width:328px; height:277px;" aria-label="Professor" title="Professor"></button>
+        <button class="role-hotspot" id="hotspot-hacker" style="left:1079px; top:121px; width:328px; height:277px;" aria-label="Hacker" title="Hacker"></button>
+        <button class="role-hotspot" id="hotspot-video" style="left:502px; top:767px; width:596px; height:51px;" aria-label="What is the file for?" title="What is the file for?"></button>
       </div>
-
       <div id="pdfViewer"></div>
     </div>
 
-    <div id="openFileWrap">
-      <button id="openFileBtn" type="button">Open the file on a new tab</button>
-    </div>
+    <div id="openFileWrap"><button id="openFileBtn" type="button">Open the file on a new tab</button></div>
   </div>
 
   <div id="side-widget" class="collapsed" aria-label="Translation widget">
     <button id="collapse-widget" type="button" aria-label="Collapse translation widget">–</button>
     <p class="title">Need translation?</p>
     <button id="select-text" type="button">Select Text</button>
-    <p>
-      <a href="https://translate.google.com/?sl=en&tl=es&op=images" target="_blank">
-        Click me and paste from clipboard
-      </a>
-    </p>
+    <p><a href="https://translate.google.com/?sl=en&tl=es&op=images" target="_blank">Click me and paste from clipboard</a></p>
   </div>
+
+  <div id="customPopupOverlay">
+    <div id="customPopupBox">
+      <div id="customPopupText"></div>
+      <div id="customPopupButtons"></div>
+    </div>
+  </div>
+
 
   <script>
 const TUTORIAL_IMAGES = [
@@ -716,844 +298,489 @@ const TUTORIAL_IMAGES = [
   "https://daryeaye.github.io/geotopia/t3.jpg"
 ];
     
-    const INTRO_URL = "https://youtu.be/F8paV80TGac";
-    const FINAL_UNLOCK_URL = "https://daryeaye.github.io/gt9/zach.html";
-    const WORKER_BASE_URL = "https://geotopia-powerfall-auth-api.daryeaye.workers.dev";
-    const APP_ID = "powerfall-pt2";
-
-    const SESSION_STORAGE = {
-      token: "gt9_auth_token",
-      username: "gt9_auth_username"
-    };
-
-    const SUB_PAGES = Array.from({ length: 16 }, (_, i) => i + 5);
-
-    const HUB_BOXES = {
-      5:  { left:149, top:15,  width:92,  height:85 },
-      8:  { left:252, top:15,  width:92,  height:85 },
-      10: { left:356, top:15,  width:92,  height:85 },
-      11: { left:460, top:15,  width:92,  height:85 },
-      18: { left:565, top:15,  width:92,  height:85 },
-      20: { left:669, top:15,  width:92,  height:85 },
-
-      19: { left:64,  top:53,  width:80,  height:111 },
-      17: { left:64,  top:182, width:80,  height:111 },
-      14: { left:64,  top:317, width:80,  height:121 },
-
-      6:  { left:813, top:53,  width:80,  height:111 },
-      16: { left:813, top:182, width:80,  height:111 },
-      15: { left:813, top:317, width:80,  height:121 },
-
-      12: { left:154, top:430, width:116, height:108 },
-      9:  { left:286, top:430, width:116, height:108 },
-      7:  { left:549, top:430, width:116, height:108 },
-      13: { left:682, top:430, width:116, height:108 },
-
-      24: { left:309, top:181, width:344, height:190 }
-    };
-
-    const HUB_RULES = {
-      5:  { selector: "#page5-main",  contains: ["square"], caseInsensitive: true },
-      6:  { selector: "#page6-main",  contains: ["equi"], caseInsensitive: true },
-      7:  { selector: "#page7-main",  contains: ["10"], caseInsensitive: false },
-      8:  { selector: "#page8-answer",  contains: ["258"], caseInsensitive: false },
-      9:  { selector: "#page9-answer",  contains: ["120"], caseInsensitive: false },
-      10: { selector: "#page10-answer", contains: ["6.2"], caseInsensitive: false },
-      11: { selector: "#page11-answer", contains: ["13"], caseInsensitive: false },
-      12: { selector: "#page12-answer", contains: ["4.3"], caseInsensitive: false },
-      13: { selector: "#page13-answer", contains: ["60"], caseInsensitive: false },
-      14: { selector: "#page14-answer", contains: ["33"], caseInsensitive: false },
-      15: { selector: "#page15-answer", contains: ["127.8"], caseInsensitive: false },
-      16: { selector: "#page16-answer", contains: ["5.55"], caseInsensitive: false },
-      17: { selector: "#page17-answer", contains: ["33"], caseInsensitive: false },
-      18: { selector: "#page18-answer", contains: ["20"], caseInsensitive: false },
-      19: { selector: "#page19-answer", contains: ["26"], caseInsensitive: false },
-      20: { selector: "#page20-answer", contains: ["24"], caseInsensitive: false }
-    };
+    const APP_ID = 'powerfall-pt1';
+    const WORKER_BASE_URL = 'https://geotopia-powerfall-auth-api.daryeaye.workers.dev';
+    const SESSION_STORAGE_KEY = 'gt8_cloud_token';
+    const INTRO_URL = 'https://youtu.be/F8paV80TGac';
+    const ALERT_EMPTY = 'You must help Yuki before moving on.';
+    const ALERT_WRONG = 'Check the mural and try again.';
 
     let currentPage = 1;
-    let currentPdfUrl = null;
-    let solvedHubPages = new Set();
-    let choiceTarget = "";
-    let page21ShownAlready = false;
+    const totalPages = 18;
+    let branchLastPage = null;
+    let maxSeqIndexVisited = 0;
+    let currentPdfUrl = '';
 
-    let authToken = "";
-    let authUsername = "";
-    let autoSaveTimer = null;
-    let saveInFlight = false;
-    let saveQueued = false;
+    let authToken = '';
+    let loggedInUsername = '';
+    let saveTimer = null;
     let isApplyingRemoteData = false;
+    const drawings = { draw4: [], draw6: [], draw8: [], draw11: [], draw12: [] };
 
-    function openIntro() {
-      window.open(INTRO_URL, "_blank");
+    function openIntro() { window.open(INTRO_URL, '_blank'); }
+    function setSaveStatus(text) { document.getElementById('saveStatus').textContent = text; }
+
+    function getSequence() {
+      if (branchLastPage === 15) return [1,2,3,4,5,'5ex',6,7,'7ex',8,9,10,11,12,13,14,15];
+      if (branchLastPage === 16) return [1,2,3,4,5,'5ex',6,7,'7ex',8,9,10,11,12,13,14,16];
+      return [1,2,3,4,5,'5ex',6,7,'7ex',8,9,10,11,12,13,14,15,16];
     }
 
-    function getAuthElements() {
-      return {
-        usernameInput: document.getElementById("student-username"),
-        passwordInput: document.getElementById("student-password"),
-        authStatus: document.getElementById("authStatus"),
-        registerBtn: document.getElementById("registerBtn"),
-        loginBtn: document.getElementById("loginBtn"),
-        logoutBtn: document.getElementById("logoutBtn")
-      };
+    function requiresAnimationPrompt(pageId) { return ['5ex','7ex'].includes(pageId); }
+
+    function normalizePageId(pageId) {
+      if (pageId === '5ex' || pageId === '7ex') return pageId;
+      const n = Number(pageId);
+      return Number.isInteger(n) && n >= 1 && n <= 16 ? n : 1;
     }
 
-    function setAuthStatus(message, isError = false) {
-      const { authStatus } = getAuthElements();
-      authStatus.textContent = message;
-      authStatus.style.color = isError ? "#b00020" : "#222";
+    let customPopupResolver = null;
+
+    function closeCustomPopup(result = null) {
+      document.getElementById('customPopupOverlay').style.display = 'none';
+      document.getElementById('customPopupText').textContent = '';
+      document.getElementById('customPopupButtons').innerHTML = '';
+      const resolver = customPopupResolver;
+      customPopupResolver = null;
+      if (resolver) resolver(result);
     }
 
-    function updateAuthUI() {
-      const { usernameInput, registerBtn, loginBtn, logoutBtn } = getAuthElements();
-      const signedIn = !!authToken;
+    function showCustomPopup(message, buttons, resolver = null) {
+      customPopupResolver = resolver;
+      document.getElementById('customPopupText').textContent = message;
+      const buttonWrap = document.getElementById('customPopupButtons');
+      buttonWrap.innerHTML = '';
 
-      registerBtn.style.display = signedIn ? "none" : "inline-block";
-      loginBtn.style.display = signedIn ? "none" : "inline-block";
-      logoutBtn.style.display = signedIn ? "inline-block" : "none";
-
-      if (signedIn) {
-        usernameInput.value = authUsername || "";
-        setAuthStatus("Signed in as " + authUsername);
-      } else {
-        setAuthStatus("Not signed in");
-      }
-    }
-
-    function saveSessionLocally(token, username) {
-      authToken = token || "";
-      authUsername = username || "";
-      localStorage.setItem(SESSION_STORAGE.token, authToken);
-      localStorage.setItem(SESSION_STORAGE.username, authUsername);
-      updateAuthUI();
-    }
-
-    function clearSessionLocally() {
-      authToken = "";
-      authUsername = "";
-      localStorage.removeItem(SESSION_STORAGE.token);
-      localStorage.removeItem(SESSION_STORAGE.username);
-      updateAuthUI();
-    }
-
-    function restoreSessionLocally() {
-      authToken = localStorage.getItem(SESSION_STORAGE.token) || "";
-      authUsername = localStorage.getItem(SESSION_STORAGE.username) || "";
-      const { usernameInput } = getAuthElements();
-      if (authUsername) usernameInput.value = authUsername;
-      updateAuthUI();
-    }
-
-    async function apiFetch(path, options = {}) {
-      const headers = {
-        "Content-Type": "application/json",
-        ...(options.headers || {})
-      };
-
-      if (authToken) {
-        headers.Authorization = "Bearer " + authToken;
-      }
-
-      const response = await fetch(WORKER_BASE_URL + path, {
-        method: options.method || "GET",
-        headers,
-        body: options.body
+      buttons.forEach(btn => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = btn.text;
+        button.addEventListener('click', () => closeCustomPopup(btn.value));
+        buttonWrap.appendChild(button);
       });
 
-      const json = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(json.error || "Request failed");
-      }
-
-      return json;
+      document.getElementById('customPopupOverlay').style.display = 'flex';
     }
 
-    function getInputSnapshot() {
-      const snapshot = {};
-      document.querySelectorAll("[data-savekey]").forEach(input => {
-        snapshot[input.dataset.savekey] = input.value || "";
+    function showMessagePopup(message) {
+      showCustomPopup(message, [{ text: 'OK', value: true }]);
+    }
+
+    function askYesNoPopup(message) {
+      return new Promise(resolve => {
+        showCustomPopup(message, [
+          { text: 'Yes', value: true },
+          { text: 'No', value: false }
+        ], resolve);
       });
-      return snapshot;
     }
 
-    function applyInputSnapshot(snapshot) {
-      isApplyingRemoteData = true;
-      document.querySelectorAll("[data-savekey]").forEach(input => {
-        const key = input.dataset.savekey;
-        input.value = snapshot && Object.prototype.hasOwnProperty.call(snapshot, key)
-          ? (snapshot[key] ?? "")
-          : "";
-      });
-      isApplyingRemoteData = false;
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    function buildProgressPayload() {
-      return {
-        playerName: authUsername,
-        currentPage,
-        solvedHubPages: Array.from(solvedHubPages),
-        choiceTarget,
-        page21ShownAlready,
-        currentPdfUrl,
-        inputValues: getInputSnapshot()
-      };
+    async function playNextPageTransition(changePageFn) {
+      const overlay = document.getElementById('pageTransitionOverlay');
+      overlay.style.pointerEvents = 'auto';
+      overlay.style.opacity = '1';
+      await wait(300);
+      changePageFn();
+      await wait(80);
+      overlay.style.opacity = '0';
+      await wait(300);
+      overlay.style.pointerEvents = 'none';
     }
 
-    function applyProgressPayload(progress) {
-      if (!progress || typeof progress !== "object") return;
+    function requiresCheck(pageNum) { return [3,5,7,9,11,12,14].includes(pageNum); }
 
-      applyInputSnapshot(progress.inputValues || {});
-      currentPdfUrl = progress.currentPdfUrl || null;
-
-      try {
-        solvedHubPages = new Set(
-          Array.isArray(progress.solvedHubPages)
-            ? progress.solvedHubPages.map(Number).filter(n => SUB_PAGES.includes(n))
-            : []
-        );
-      } catch (e) {
-        solvedHubPages = new Set();
-      }
-
-      choiceTarget = progress.choiceTarget || "";
-      page21ShownAlready = !!progress.page21ShownAlready;
-
-      const pageToShow =
-        Number(progress.currentPage) >= 1 && Number(progress.currentPage) <= 24
-          ? Number(progress.currentPage)
-          : 1;
-
-      updateHubUI();
-      showPage(pageToShow);
-    }
-
-    async function registerUser() {
-      const { usernameInput, passwordInput } = getAuthElements();
-      const username = usernameInput.value.trim();
-      const password = passwordInput.value;
-
-      if (!username || !password) {
-        setAuthStatus("Enter username and password", true);
-        return;
-      }
-
-      try {
-        setAuthStatus("Registering...");
-        const result = await apiFetch("/api/register", {
-          method: "POST",
-          body: JSON.stringify({ username, password, appId: APP_ID })
-        });
-
-        saveSessionLocally(result.token, result.username || username);
-        passwordInput.value = "";
-
-        if (result.saveData) {
-          applyProgressPayload(result.saveData);
+    function validatePage(pageNum) {
+      switch (pageNum) {
+        case 3: {
+          const keys = ['side','height','half','base','bases','parallel'];
+          const inputs = Array.from(document.querySelectorAll('#page3 input.textbox'));
+          const vals = inputs.map(i => (i.value || '').trim());
+          const allEmpty = vals.every(v => v === '');
+          if (allEmpty) return { ok: false, reason: 'empty' };
+          let correct = 0;
+          for (let i = 0; i < Math.min(vals.length, keys.length); i++) if (vals[i].toLowerCase() === keys[i]) correct++;
+          return (correct >= 4) ? { ok: true } : { ok: false, reason: 'wrong' };
         }
-
-        setAuthStatus("Account created.");
-        queueAutoSave();
-      } catch (err) {
-        setAuthStatus(err.message || "Register failed", true);
-      }
-    }
-
-    async function loginUser() {
-      const { usernameInput, passwordInput } = getAuthElements();
-      const username = usernameInput.value.trim();
-      const password = passwordInput.value;
-
-      if (!username || !password) {
-        setAuthStatus("Enter username and password", true);
-        return;
-      }
-
-      try {
-        setAuthStatus("Logging in...");
-        const result = await apiFetch("/api/login", {
-          method: "POST",
-          body: JSON.stringify({ username, password, appId: APP_ID })
-        });
-
-        saveSessionLocally(result.token, result.username || username);
-        passwordInput.value = "";
-
-        if (result.saveData) {
-          applyProgressPayload(result.saveData);
-        } else {
-          await loadProgressFromServer();
+        case 5: {
+          const v = ['p5-63','p5-72','p5-42','p5-112'].map(k => (document.querySelector(`input[data-savekey="${k}"]`)?.value || '').trim());
+          if (v.every(s => s === '')) return { ok: false, reason: 'empty' };
+          return (v[0].includes('63') && v[1].includes('72') && v[2].includes('42') && v[3].includes('112')) ? { ok: true } : { ok: false, reason: 'wrong' };
         }
-
-        setAuthStatus("Login successful.");
-      } catch (err) {
-        setAuthStatus(err.message || "Login failed", true);
-      }
-    }
-
-    async function loadProgressFromServer() {
-      if (!authToken) return;
-
-      try {
-const result = await apiFetch("/api/load?appId=" + encodeURIComponent(APP_ID), {
-          method: "GET"
-        });
-
-        if (result.saveData) {
-          applyProgressPayload(result.saveData);
+        case 7: {
+          const v = ['p7-40','p7-17.5','p7-30','p7-120'].map(k => (document.querySelector(`input[data-savekey="${k}"]`)?.value || '').trim());
+          if (v.every(s => s === '')) return { ok: false, reason: 'empty' };
+          return (v[0].includes('40') && v[1].includes('17.5') && v[2].includes('30') && v[3].includes('120')) ? { ok: true } : { ok: false, reason: 'wrong' };
         }
-
-        if (result.username) {
-          authUsername = result.username;
-          localStorage.setItem(SESSION_STORAGE.username, authUsername);
+        case 9: {
+          const v = ['p9-40.5','p9-30','p9-148','p9-50'].map(k => (document.querySelector(`input[data-savekey="${k}"]`)?.value || '').trim());
+          if (v.every(s => s === '')) return { ok: false, reason: 'empty' };
+          return (v[0].includes('40.5') && v[1].includes('30') && v[2].includes('148') && v[3].includes('50')) ? { ok: true } : { ok: false, reason: 'wrong' };
         }
-
-        setAuthStatus("Signed in as " + authUsername);
-      } catch (err) {
-        setAuthStatus(err.message || "Could not load progress", true);
-      }
-    }
-
-    async function saveProgressToServer() {
-      if (!authToken || saveInFlight) return;
-
-      saveInFlight = true;
-
-      try {
-        await apiFetch("/api/save", {
-          method: "POST",
-          body: JSON.stringify({
-            appId: APP_ID,
-            saveData: buildProgressPayload()
-          })
-        });
-        setAuthStatus("Saved for " + authUsername);
-      } catch (err) {
-        setAuthStatus(err.message || "Save failed", true);
-      } finally {
-        saveInFlight = false;
-        if (saveQueued) {
-          saveQueued = false;
-          saveProgressToServer();
+        case 11: {
+          const v = (document.querySelector('input[data-savekey="p11-141"]')?.value || '').trim();
+          if (v === '') return { ok: false, reason: 'empty' };
+          return v.includes('141') ? { ok: true } : { ok: false, reason: 'wrong' };
+        }
+        case 12: {
+          const v = (document.querySelector('input[data-savekey="p12-138"]')?.value || '').trim();
+          if (v === '') return { ok: false, reason: 'empty' };
+          return v.includes('138') ? { ok: true } : { ok: false, reason: 'wrong' };
+        }
+        case 14: {
+          const v = (document.querySelector('input[data-savekey="p14-114"]')?.value || '').trim();
+          if (v === '') return { ok: false, reason: 'empty' };
+          return v.includes('114') ? { ok: true } : { ok: false, reason: 'wrong' };
         }
       }
+      return { ok: true };
     }
 
-    function queueAutoSave() {
-      if (isApplyingRemoteData || !authToken) return;
-
-      clearTimeout(autoSaveTimer);
-      autoSaveTimer = setTimeout(() => {
-        if (saveInFlight) {
-          saveQueued = true;
+    async function nextPage() {
+      if (requiresCheck(currentPage)) {
+        const res = validatePage(currentPage);
+        if (!res.ok) {
+          showMessagePopup(res.reason === 'empty' ? ALERT_EMPTY : ALERT_WRONG);
           return;
         }
-        saveProgressToServer();
-      }, 900);
-    }
-
-    async function logoutUser() {
-      clearTimeout(autoSaveTimer);
-
-      try {
-        if (authToken) {
-          await apiFetch("/api/logout", {
-            method: "POST",
-            body: "{}"
-          });
-        }
-      } catch (err) {
-        console.error(err);
       }
-
-      clearSessionLocally();
-
-      const { passwordInput } = getAuthElements();
-      passwordInput.value = "";
-      setAuthStatus("Logged out");
-    }
-
-    function initCloudSaveInputs() {
-      const inputs = document.querySelectorAll("[data-savekey]");
-      inputs.forEach(input => {
-        input.addEventListener("input", () => {
-          queueAutoSave();
-        });
-      });
-    }
-
-    function loadHubStateDefault() {
-      solvedHubPages = new Set();
-      choiceTarget = "";
-      page21ShownAlready = false;
-    }
-
-    function scalePage4Rect(rect) {
-      return rect;
-    }
-
-    function buildPage4Hub() {
-      const hubLayer = document.getElementById("page4-hub");
-      const checkLayer = document.getElementById("page4-checkmarks");
-
-      Object.entries(HUB_BOXES).forEach(([pageNumStr, rect]) => {
-        const pageNum = Number(pageNumStr);
-        const r = scalePage4Rect(rect);
-
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "hub-hotspot";
-        btn.style.left = r.left + "px";
-        btn.style.top = r.top + "px";
-        btn.style.width = r.width + "px";
-        btn.style.height = r.height + "px";
-        btn.dataset.target = pageNum;
-        btn.addEventListener("click", () => {
-          showPage(pageNum);
-          queueAutoSave();
-        });
-        hubLayer.appendChild(btn);
-
-        if (pageNum >= 5 && pageNum <= 20) {
-          const mark = document.createElement("div");
-          mark.id = "checkmark-" + pageNum;
-          mark.className = "checkmark";
-          mark.textContent = "✅";
-          mark.style.left = r.left + "px";
-          mark.style.top = r.top + "px";
-          mark.style.width = r.width + "px";
-          mark.style.height = r.height + "px";
-          checkLayer.appendChild(mark);
-        }
-      });
-
-      document.getElementById("page4-next-overlay").addEventListener("click", goToEndingFromHub);
-    }
-
-    function updateHubUI() {
-      SUB_PAGES.forEach(pageNum => {
-        const mark = document.getElementById("checkmark-" + pageNum);
-        if (mark) {
-          mark.style.display = solvedHubPages.has(pageNum) ? "flex" : "none";
-        }
-      });
-
-      const overlayBtn = document.getElementById("page4-next-overlay");
-      overlayBtn.style.display = (currentPage === 4 && allHubSolved()) ? "flex" : "none";
-    }
-
-    function allHubSolved() {
-      return SUB_PAGES.every(pageNum => solvedHubPages.has(pageNum));
-    }
-
-    function solvedHubCount() {
-      return solvedHubPages.size;
-    }
-
-    function normalizeForContains(value, caseInsensitive) {
-      return caseInsensitive ? value.toLowerCase() : value;
-    }
-
-    function validatePage3() {
-      const top = (document.getElementById("page3-a1").value || "").trim();
-      const mid = (document.getElementById("page3-a2").value || "").trim().toLowerCase();
-      const bot = (document.getElementById("page3-a3").value || "").trim().toLowerCase();
-
-      if (top === "" || mid === "" || bot === "") return false;
-
-      const midOK =
-        mid.includes("2") ||
-        mid.includes("two") ||
-        mid.includes("half");
-
-      const botOK =
-        bot.includes("2") ||
-        bot.includes("two") ||
-        bot.includes("half");
-
-      return midOK && botOK;
-    }
-
-    function validateHubPage(pageNum) {
-      const rule = HUB_RULES[pageNum];
-      if (!rule) return false;
-
-      const input = document.querySelector(rule.selector);
-      if (!input) return false;
-
-      const raw = (input.value || "").trim();
-      if (raw === "") return false;
-
-      const value = normalizeForContains(raw, rule.caseInsensitive);
-      return rule.contains.every(item => {
-        const needle = normalizeForContains(String(item), rule.caseInsensitive);
-        return value.includes(needle);
-      });
-    }
-
-    function nextPage() {
-      if (currentPage === 1) {
-        showPage(2);
-        queueAutoSave();
+      if (requiresAnimationPrompt(currentPage)) {
+        const finished = await askYesNoPopup('Did you finish watching the animation?');
+        if (!finished) return;
+      }
+      if (currentPage === 13 && !branchLastPage) {
+        showMessagePopup('Choose one path on this page to continue.');
         return;
       }
-
-      if (currentPage === 2) {
-        showPage(3);
-        queueAutoSave();
-        return;
-      }
-
-      if (currentPage === 3) {
-        if (!validatePage3()) {
-          alert("Please make sure all three answers are correct before moving on.");
-          return;
-        }
-        showPage(4);
-        queueAutoSave();
-        return;
-      }
-
-      if (currentPage === 4) {
-        goToEndingFromHub();
-      }
-    }
-
-    function goToEndingFromHub() {
-      if (!allHubSolved()) return;
-
-      if (!choiceTarget) {
-        showPage(21);
-        queueAutoSave();
-        return;
-      }
-
-      showPage(Number(choiceTarget));
-      queueAutoSave();
+      const seq = getSequence();
+      const idx = seq.indexOf(currentPage);
+      if (idx === -1 || idx >= seq.length - 1) return;
+      await playNextPageTransition(() => {
+        currentPage = seq[idx + 1];
+        showPage(currentPage);
+      });
     }
 
     function prevPage() {
-      if (currentPage === 2) {
-        showPage(1);
-        queueAutoSave();
-        return;
-      }
-
-      if (currentPage === 3) {
-        showPage(2);
-        queueAutoSave();
-        return;
-      }
-
-      if (currentPage === 4) {
-        showPage(3);
-        queueAutoSave();
-        return;
-      }
-
-      if ([21,22,23,24].includes(currentPage)) {
-        showPage(4);
-        queueAutoSave();
-      }
+      const seq = getSequence();
+      const idx = seq.indexOf(currentPage);
+      if (idx <= 0) return;
+      currentPage = seq[idx - 1];
+      showPage(currentPage);
     }
 
-    function checkCurrentHubAnswer() {
-      if (!SUB_PAGES.includes(currentPage)) return;
-
-      const ok = validateHubPage(currentPage);
-
-      if (!ok) {
-        alert("Oops. You need to try again or you will lose the chance to win the grand prize!");
-        return;
-      }
-
-      const wasAlreadySolved = solvedHubPages.has(currentPage);
-      solvedHubPages.add(currentPage);
-      updateHubUI();
-      queueAutoSave();
-
-      const justReachedTen = !wasAlreadySolved && solvedHubCount() >= 10 && !page21ShownAlready;
-
-      if (justReachedTen) {
-        page21ShownAlready = true;
-        queueAutoSave();
-        showPage(21);
-        return;
-      }
-
-      showPage(4);
-    }
-
-    function showPage(pageNum) {
-      currentPage = pageNum;
-
-      for (let i = 1; i <= 24; i++) {
-        const page = document.getElementById("page" + i);
-        if (page) page.classList.remove("active");
-      }
-
-      const target = document.getElementById("page" + pageNum);
-      if (target) target.classList.add("active");
-
-      updateHubUI();
-      updateNavButtons();
+    function showPage(p) {
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      document.getElementById('page' + p).classList.add('active');
+      const seq = getSequence();
+      const idx = seq.indexOf(p);
+      if (idx !== -1) maxSeqIndexVisited = Math.max(maxSeqIndexVisited, idx);
+      document.getElementById('prev-btn').style.display = (idx <= 0) ? 'none' : 'inline-block';
+      const isLast = (idx >= seq.length - 1);
+      const lockOn13 = (p === 13 && !branchLastPage);
+      document.getElementById('next-btn').style.display = (isLast || lockOn13) ? 'none' : 'inline-block';
       updateProgress();
-    }
-
-    function updateNavButtons() {
-      const prevBtn = document.getElementById("prev-btn");
-      const nextBtn = document.getElementById("next-btn");
-      const checkBtn = document.getElementById("check-btn");
-
-      prevBtn.style.display = "none";
-      nextBtn.style.display = "none";
-      checkBtn.style.display = "none";
-
-      if (currentPage === 1) {
-        nextBtn.style.display = "inline-block";
-        return;
-      }
-
-      if (currentPage === 2 || currentPage === 3) {
-        prevBtn.style.display = "inline-block";
-        nextBtn.style.display = "inline-block";
-        return;
-      }
-
-      if (currentPage === 4) {
-        prevBtn.style.display = "inline-block";
-        nextBtn.style.display = allHubSolved() ? "inline-block" : "none";
-        return;
-      }
-
-      if (SUB_PAGES.includes(currentPage)) {
-        checkBtn.style.display = "inline-block";
-        return;
-      }
-
-      if ([21,22,23,24].includes(currentPage)) {
-        prevBtn.style.display = "inline-block";
-      }
+      queueCloudSave();
     }
 
     function updateProgress() {
-      let baseSteps = 1;
-
-      if (currentPage >= 2) baseSteps = 2;
-      if (currentPage >= 3) baseSteps = 3;
-      if (currentPage >= 4 || SUB_PAGES.includes(currentPage) || [21,22,23,24].includes(currentPage)) baseSteps = 4;
-
-      const endingStep = [22,23].includes(currentPage) ? 1 : 0;
-      const totalSteps = 21;
-      const completedSteps = Math.min(baseSteps + solvedHubCount() + endingStep, totalSteps);
+      const seq = getSequence();
+      const totalSteps = seq.length;
+      const completedSteps = Math.min(maxSeqIndexVisited + 1, totalSteps);
       const pct = (completedSteps / totalSteps) * 100;
-
-      document.getElementById("progress").style.width = pct + "%";
-      document.getElementById("progressText").innerText = pct.toFixed(0) + "% completed";
+      document.getElementById('progress').style.width = pct + '%';
+      document.getElementById('progressText').innerText = pct.toFixed(0) + '% completed';
     }
 
-    function initPage21Choices() {
-      document.getElementById("page21-left-choice").addEventListener("click", () => {
-        choiceTarget = "23";
-        queueAutoSave();
-        showPage(4);
-      });
-
-      document.getElementById("page21-right-choice").addEventListener("click", () => {
-        choiceTarget = "22";
-        queueAutoSave();
-        showPage(4);
+    function redrawLines(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      (drawings[canvasId] || []).forEach(l => {
+        ctx.beginPath();
+        ctx.moveTo(l.startX, l.startY);
+        ctx.lineTo(l.endX, l.endY);
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 4;
+        ctx.stroke();
       });
     }
 
-    function initFinalCodeInputs() {
-      ["page22-code", "page23-code"].forEach(id => {
-        const input = document.getElementById(id);
+    function initLineDrawing(canvasId, resetBtnId, maxLines = 4) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const resetBtn = document.getElementById(resetBtnId);
+      let drawing = false, startX = 0, startY = 0;
+      function getMousePos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return { x: (e.clientX - rect.left) * (canvas.width / rect.width), y: (e.clientY - rect.top) * (canvas.height / rect.height) };
+      }
+      function redraw(preview = null) {
+        redrawLines(canvasId);
+        if (preview) {
+          ctx.beginPath(); ctx.moveTo(preview.startX, preview.startY); ctx.lineTo(preview.endX, preview.endY);
+          ctx.strokeStyle = 'red'; ctx.lineWidth = 4; ctx.stroke();
+        }
+      }
+      canvas.addEventListener('mousedown', e => {
+        if ((drawings[canvasId] || []).length >= maxLines) return;
+        const p = getMousePos(e); drawing = true; startX = p.x; startY = p.y;
+      });
+      canvas.addEventListener('mousemove', e => {
+        if (!drawing) return; const p = getMousePos(e); redraw({ startX, startY, endX: p.x, endY: p.y });
+      });
+      canvas.addEventListener('mouseup', e => {
+        if (!drawing) return; drawing = false; const p = getMousePos(e);
+        drawings[canvasId].push({ startX, startY, endX: p.x, endY: p.y }); redrawLines(canvasId); queueCloudSave();
+      });
+      canvas.addEventListener('mouseleave', () => { if (drawing) { drawing = false; redrawLines(canvasId); } });
+      resetBtn.addEventListener('click', () => { drawings[canvasId] = []; redrawLines(canvasId); queueCloudSave(); });
+    }
+
+    function initBranchButtons() {
+      document.getElementById('choice-to-15').addEventListener('click', () => { branchLastPage = 15; currentPage = 14; showPage(currentPage); });
+      document.getElementById('choice-to-16').addEventListener('click', () => { branchLastPage = 16; currentPage = 14; showPage(currentPage); });
+    }
+
+    function initYukiInputs() {
+      [document.querySelector('#page15 input'), document.querySelector('#page16 input')].forEach(input => {
         if (!input) return;
-
-        input.addEventListener("input", () => {
-          if (input.value.trim() === "fe" && input.dataset.done !== "1") {
-            input.dataset.done = "1";
-            window.open(FINAL_UNLOCK_URL, "_blank");
+        input.addEventListener('input', () => {
+          const v = input.value.trim().toLowerCase();
+          if (v === 'ki' && input.dataset.done !== '1') {
+            input.dataset.done = '1';
+            window.open('https://daryeaye.github.io/gt8/zedong.html', '_blank');
+            input.value = '';
+            queueCloudSave();
           }
         });
       });
     }
 
     function initPdfJs() {
-      pdfjsLib.GlobalWorkerOptions.workerSrc =
-        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
     async function renderPdfIntoSecondCanvas(pdfUrl) {
-      currentPdfUrl = pdfUrl;
-
-      const roleContainer = document.getElementById("role-container");
-      const viewer = document.getElementById("pdfViewer");
-      const status = document.getElementById("pdfStatus");
-
-      roleContainer.classList.add("pdf-mode");
-      viewer.style.display = "block";
-      viewer.innerHTML = "";
-      viewer.scrollTop = 0;
-
-      status.style.display = "block";
-      status.textContent = "Loading PDF...";
-
+      currentPdfUrl = pdfUrl; queueCloudSave();
+      const roleContainer = document.getElementById('role-container');
+      const viewer = document.getElementById('pdfViewer');
+      const status = document.getElementById('pdfStatus');
+      roleContainer.classList.add('pdf-mode'); viewer.style.display = 'block'; viewer.innerHTML = ''; viewer.scrollTop = 0;
+      status.style.display = 'block'; status.textContent = 'Loading PDF...';
       try {
         const loadingTask = pdfjsLib.getDocument({ url: pdfUrl });
-        const pdf = await loadingTask.promise;
-
-        status.textContent = "Rendering pages...";
-
+        const pdf = await loadingTask.promise; status.textContent = 'Rendering pages...';
         const targetWidth = 920;
         for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-          const page = await pdf.getPage(pageNum);
-          const viewport1 = page.getViewport({ scale: 1 });
-          const scale = targetWidth / viewport1.width;
-          const viewport = page.getViewport({ scale });
-
-          const c = document.createElement("canvas");
-          c.className = "pdfPageCanvas";
-          c.width = Math.floor(viewport.width);
-          c.height = Math.floor(viewport.height);
-
-          const ctx = c.getContext("2d", { alpha: false });
-          viewer.appendChild(c);
-
+          const page = await pdf.getPage(pageNum); const viewport1 = page.getViewport({ scale: 1 });
+          const scale = targetWidth / viewport1.width; const viewport = page.getViewport({ scale });
+          const c = document.createElement('canvas'); c.className = 'pdfPageCanvas'; c.width = Math.floor(viewport.width); c.height = Math.floor(viewport.height);
+          const ctx = c.getContext('2d', { alpha: false }); viewer.appendChild(c);
           await page.render({ canvasContext: ctx, viewport }).promise;
         }
-
-        status.style.display = "none";
-        queueAutoSave();
+        status.style.display = 'none';
       } catch (err) {
-        console.error("PDF.js render error:", err);
-        status.textContent = "Failed to load PDF (see Console).";
+        console.error('PDF.js render error:', err); status.textContent = 'Failed to load PDF (see Console).';
       }
     }
 
     function initSecondCanvasHotspots() {
-      document.getElementById("hotspot-officer").addEventListener("click", function () {
-        renderPdfIntoSecondCanvas("https://daryeaye.github.io/gt8/GT2%20Officer.pdf");
-      });
+      document.getElementById('hotspot-officer').addEventListener('click', () => renderPdfIntoSecondCanvas('https://daryeaye.github.io/gt8/GT2%20Officer.pdf'));
+      document.getElementById('hotspot-professor').addEventListener('click', () => renderPdfIntoSecondCanvas('https://daryeaye.github.io/gt8/GT2%20Professor.pdf'));
+      document.getElementById('hotspot-hacker').addEventListener('click', () => renderPdfIntoSecondCanvas('https://daryeaye.github.io/gt8/GT2%20Hacker.pdf'));
+      document.getElementById('hotspot-video').addEventListener('click', () => window.open('https://www.youtube.com/watch?v=Fj98o3aFfk8', '_blank'));
+    }
 
-      document.getElementById("hotspot-professor").addEventListener("click", function () {
-        renderPdfIntoSecondCanvas("https://daryeaye.github.io/gt8/GT2%20Professor.pdf");
-      });
+    function collectInputValues() {
+      const data = {};
+      document.querySelectorAll('.cloud-input').forEach(el => { data[el.dataset.savekey || el.id] = el.value; });
+      return data;
+    }
 
-      document.getElementById("hotspot-hacker").addEventListener("click", function () {
-        renderPdfIntoSecondCanvas("https://daryeaye.github.io/gt8/GT2%20Hacker.pdf");
-      });
-
-      document.getElementById("hotspot-video").addEventListener("click", function () {
-        window.open("https://www.youtube.com/watch?v=Fj98o3aFfk8", "_blank");
+    function applyInputValues(values) {
+      const safe = values && typeof values === 'object' ? values : {};
+      document.querySelectorAll('.cloud-input').forEach(el => {
+        const key = el.dataset.savekey || el.id;
+        el.value = Object.prototype.hasOwnProperty.call(safe, key) ? safe[key] : '';
       });
     }
 
-    function initOpenFileButton() {
-      document.getElementById("openFileBtn").addEventListener("click", () => {
-        if (!currentPdfUrl) {
-          alert("Please select a role file first.");
-          return;
-        }
-        window.open(currentPdfUrl, "_blank");
+    function buildProgressPayload() {
+      return {
+        playerName: loggedInUsername,
+        currentPage,
+        branchLastPage,
+        maxSeqIndexVisited,
+        currentPdfUrl,
+        inputValues: collectInputValues(),
+        drawings
+      };
+    }
+
+    function applyProgressPayload(payload) {
+      isApplyingRemoteData = true;
+      const safe = payload && typeof payload === 'object' ? payload : {};
+      branchLastPage = safe.branchLastPage === 15 || safe.branchLastPage === 16 ? safe.branchLastPage : null;
+      maxSeqIndexVisited = Number.isInteger(Number(safe.maxSeqIndexVisited)) ? Number(safe.maxSeqIndexVisited) : 0;
+      currentPdfUrl = String(safe.currentPdfUrl || '');
+      applyInputValues(safe.inputValues || {});
+      const incomingDrawings = safe.drawings && typeof safe.drawings === 'object' ? safe.drawings : {};
+      ['draw4','draw6','draw8','draw11','draw12'].forEach(id => { drawings[id] = Array.isArray(incomingDrawings[id]) ? incomingDrawings[id] : []; redrawLines(id); });
+      currentPage = normalizePageId(safe.currentPage);
+      showPage(currentPage);
+      isApplyingRemoteData = false;
+    }
+
+    async function apiFetch(path, options = {}) {
+      const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+      if (authToken) headers.Authorization = 'Bearer ' + authToken;
+      const response = await fetch(WORKER_BASE_URL + path, { ...options, headers });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || data.ok === false) throw new Error(data.error || 'Request failed.');
+      return data;
+    }
+
+    function queueCloudSave() {
+      if (!authToken || isApplyingRemoteData) return;
+      clearTimeout(saveTimer);
+      setSaveStatus('Saving...');
+      saveTimer = setTimeout(() => saveProgressToServer().catch(err => { console.error(err); setSaveStatus('Save failed'); }), 700);
+    }
+
+    async function saveProgressToServer() {
+      await apiFetch('/api/save', { method: 'POST', body: JSON.stringify({ appId: APP_ID, saveData: buildProgressPayload() }) });
+      setSaveStatus('Saved');
+    }
+
+    function getAuthElements() {
+      return {
+        usernameInput: document.getElementById('student-username'),
+        passwordInput: document.getElementById('student-password'),
+        registerBtn: document.getElementById('registerBtn'),
+        loginBtn: document.getElementById('loginBtn'),
+        logoutBtn: document.getElementById('logoutBtn'),
+        authStatus: document.getElementById('authStatus')
+      };
+    }
+
+    function setAuthStatus(message, isError = false) {
+      const { authStatus } = getAuthElements();
+      authStatus.textContent = message;
+      authStatus.style.color = isError ? '#b00020' : '#222';
+    }
+
+    function updateAuthUI() {
+      const { usernameInput, passwordInput, registerBtn, loginBtn, logoutBtn } = getAuthElements();
+      const loggedIn = !!authToken;
+      if (loggedIn) {
+        usernameInput.value = loggedInUsername || usernameInput.value;
+      }
+      registerBtn.style.display = loggedIn ? 'none' : 'inline-block';
+      loginBtn.style.display = loggedIn ? 'none' : 'inline-block';
+      logoutBtn.style.display = loggedIn ? 'inline-block' : 'none';
+      setAuthStatus(loggedIn ? ('Logged in as ' + (loggedInUsername || 'student')) : 'Not logged in', false);
+    }
+
+    function saveSessionLocally(token, username) {
+      authToken = token || '';
+      loggedInUsername = username || '';
+      localStorage.setItem(SESSION_STORAGE_KEY, authToken);
+      localStorage.setItem(SESSION_STORAGE_KEY + '_username', loggedInUsername);
+      updateAuthUI();
+    }
+
+    function clearSessionLocally() {
+      authToken = '';
+      loggedInUsername = '';
+      localStorage.removeItem(SESSION_STORAGE_KEY);
+      localStorage.removeItem(SESSION_STORAGE_KEY + '_username');
+      updateAuthUI();
+    }
+
+    function restoreSessionLocally() {
+      authToken = localStorage.getItem(SESSION_STORAGE_KEY) || '';
+      loggedInUsername = localStorage.getItem(SESSION_STORAGE_KEY + '_username') || '';
+      const { usernameInput } = getAuthElements();
+      if (loggedInUsername) usernameInput.value = loggedInUsername;
+      updateAuthUI();
+    }
+
+    async function registerUser() {
+      const { usernameInput, passwordInput } = getAuthElements();
+      const username = usernameInput.value.trim().toLowerCase();
+      const password = passwordInput.value;
+      if (!username || !password) {
+        setAuthStatus('Enter username and password', true);
+        return;
+      }
+      setAuthStatus('Registering...');
+      try {
+        const result = await apiFetch('/api/register', { method: 'POST', body: JSON.stringify({ username, password, appId: APP_ID }) });
+        saveSessionLocally(result.token, result.username || username);
+        applyProgressPayload(result.saveData || {});
+        passwordInput.value = '';
+        setSaveStatus('Loaded');
+      } catch (err) {
+        setAuthStatus(err.message || 'Register failed', true);
+      }
+    }
+
+    async function loginUser() {
+      const { usernameInput, passwordInput } = getAuthElements();
+      const username = usernameInput.value.trim().toLowerCase();
+      const password = passwordInput.value;
+      if (!username || !password) {
+        setAuthStatus('Enter username and password', true);
+        return;
+      }
+      setAuthStatus('Logging in...');
+      try {
+        const result = await apiFetch('/api/login', { method: 'POST', body: JSON.stringify({ username, password, appId: APP_ID }) });
+        saveSessionLocally(result.token, result.username || username);
+        applyProgressPayload(result.saveData || {});
+        passwordInput.value = '';
+        setSaveStatus('Loaded');
+      } catch (err) {
+        setAuthStatus(err.message || 'Login failed', true);
+      }
+    }
+
+    async function loadProgressFromServer() {
+      const result = await apiFetch('/api/load?appId=' + encodeURIComponent(APP_ID), { method: 'GET' });
+      if (result.username) {
+        loggedInUsername = result.username;
+        localStorage.setItem(SESSION_STORAGE_KEY + '_username', loggedInUsername);
+      }
+      updateAuthUI();
+      applyProgressPayload(result.saveData || {});
+      setSaveStatus('Loaded');
+    }
+
+    async function logout() {
+      try { if (authToken) await apiFetch('/api/logout', { method: 'POST', body: '{}' }); } catch (err) { console.error(err); }
+      clearSessionLocally();
+      getAuthElements().passwordInput.value = '';
+      setSaveStatus('Logged out');
+      showPage(1);
+    }
+
+    function initCloudInputs() {
+      document.querySelectorAll('.cloud-input').forEach(el => {
+        el.addEventListener('input', queueCloudSave);
+        el.addEventListener('change', queueCloudSave);
       });
     }
 
-    function initTranslatorWidget() {
-      const widget = document.getElementById("side-widget");
-      const collapseBtn = document.getElementById("collapse-widget");
-
-      widget.addEventListener("click", function () {
-        if (widget.classList.contains("collapsed")) {
-          widget.classList.remove("collapsed");
-        }
-      });
-
-      collapseBtn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        widget.classList.add("collapsed");
-      });
-    }
-
-    function initTranslationScreenshotTool() {
-      document.getElementById("select-text").addEventListener("click", function () {
-        const overlay = document.createElement("div");
-        overlay.id = "selection-overlay";
-        document.body.appendChild(overlay);
-
-        let startX, startY, selectionBox;
-
-        overlay.addEventListener("mousedown", function (e) {
-          startX = e.clientX;
-          startY = e.clientY;
-
-          selectionBox = document.createElement("div");
-          selectionBox.id = "selection-box";
-          selectionBox.style.left = startX + "px";
-          selectionBox.style.top = startY + "px";
-          selectionBox.style.width = "0px";
-          selectionBox.style.height = "0px";
-          overlay.appendChild(selectionBox);
-
-          function mouseMoveHandler(e) {
-            const currentX = e.clientX;
-            const currentY = e.clientY;
-            const rectLeft = Math.min(startX, currentX);
-            const rectTop = Math.min(startY, currentY);
-            const rectWidth = Math.abs(currentX - startX);
-            const rectHeight = Math.abs(currentY - startY);
-
-            selectionBox.style.left = rectLeft + "px";
-            selectionBox.style.top = rectTop + "px";
-            selectionBox.style.width = rectWidth + "px";
-            selectionBox.style.height = rectHeight + "px";
-          }
-
-          function mouseUpHandler() {
-            overlay.removeEventListener("mousemove", mouseMoveHandler);
-            overlay.removeEventListener("mouseup", mouseUpHandler);
-
-            const boxRect = selectionBox.getBoundingClientRect();
-            document.body.removeChild(overlay);
-
-            const target = document.getElementById("container");
-            const targetRect = target.getBoundingClientRect();
-
-            html2canvas(target, { useCORS: true, allowTaint: false }).then(canvas => {
-              const scaleFactor = canvas.width / targetRect.width;
-              const sx = (boxRect.left - targetRect.left) * scaleFactor;
-              const sy = (boxRect.top - targetRect.top) * scaleFactor;
-              const sWidth = boxRect.width * scaleFactor;
-              const sHeight = boxRect.height * scaleFactor;
-
-              const croppedCanvas = document.createElement("canvas");
-              croppedCanvas.width = sWidth;
-              croppedCanvas.height = sHeight;
-
-              const ctx = croppedCanvas.getContext("2d");
-              ctx.drawImage(canvas, sx, sy, sWidth, sHeight, 0, 0, sWidth, sHeight);
-
-              croppedCanvas.toBlob(blob => {
-                if (!blob) return;
-
-                const item = new ClipboardItem({ "image/png": blob });
-                navigator.clipboard.write([item]).then(() => {
-                  alert("Screenshot copied to clipboard.");
-                }).catch(err => {
-                  console.error("Failed to copy screenshot to clipboard", err);
-                  alert("Failed to copy screenshot to clipboard.");
-                });
-              });
-            });
-          }
-
-          overlay.addEventListener("mousemove", mouseMoveHandler);
-          overlay.addEventListener("mouseup", mouseUpHandler);
-        });
-      });
-    }
+    (function () {
+      const widget = document.getElementById('side-widget');
+      const collapseBtn = document.getElementById('collapse-widget');
+      widget.addEventListener('click', function () { if (widget.classList.contains('collapsed')) widget.classList.remove('collapsed'); });
+      collapseBtn.addEventListener('click', function (e) { e.stopPropagation(); widget.classList.add('collapsed'); });
+    })();
 
 let tutorialIndex = 0;
 
@@ -1597,43 +824,64 @@ function initTutorial() {
   showTutorial();
 }
     
-    document.addEventListener("DOMContentLoaded", async function () {
-      restoreSessionLocally();
-      loadHubStateDefault();
-
-      buildPage4Hub();
-      initPage21Choices();
-      initFinalCodeInputs();
+    document.addEventListener('DOMContentLoaded', async function () {
+      initLineDrawing('draw4', 'reset4', 4);
+      initLineDrawing('draw6', 'reset6', 4);
+      initLineDrawing('draw8', 'reset8', 4);
+      initLineDrawing('draw11', 'reset11', 10);
+      initLineDrawing('draw12', 'reset12', 10);
+      initBranchButtons();
+      initYukiInputs();
       initPdfJs();
       initSecondCanvasHotspots();
-      initOpenFileButton();
-      initTranslatorWidget();
-      initTranslationScreenshotTool();
-      initCloudSaveInputs();
-
-      document.getElementById("registerBtn").addEventListener("click", registerUser);
-      document.getElementById("loginBtn").addEventListener("click", loginUser);
-      document.getElementById("logoutBtn").addEventListener("click", logoutUser);
-
-      showPage(1);
-
+      initCloudInputs();
+      restoreSessionLocally();
+      document.getElementById('registerBtn').addEventListener('click', registerUser);
+      document.getElementById('loginBtn').addEventListener('click', loginUser);
+      document.getElementById('logoutBtn').addEventListener('click', logout);
+      document.getElementById('openFileBtn').addEventListener('click', () => { if (!currentPdfUrl) { showMessagePopup('Please select a role file first.'); return; } window.open(currentPdfUrl, '_blank'); });
+      document.getElementById('select-text').addEventListener('click', function () {
+        const overlay = document.createElement('div'); overlay.id = 'selection-overlay'; document.body.appendChild(overlay);
+        let startX, startY, selectionBox;
+        overlay.addEventListener('mousedown', function (e) {
+          startX = e.clientX; startY = e.clientY;
+          selectionBox = document.createElement('div'); selectionBox.id = 'selection-box';
+          selectionBox.style.left = startX + 'px'; selectionBox.style.top = startY + 'px'; selectionBox.style.width = '0px'; selectionBox.style.height = '0px'; overlay.appendChild(selectionBox);
+          function mouseMoveHandler(e) {
+            const currentX = e.clientX, currentY = e.clientY;
+            selectionBox.style.left = Math.min(startX, currentX) + 'px';
+            selectionBox.style.top = Math.min(startY, currentY) + 'px';
+            selectionBox.style.width = Math.abs(currentX - startX) + 'px';
+            selectionBox.style.height = Math.abs(currentY - startY) + 'px';
+          }
+          function mouseUpHandler() {
+            overlay.removeEventListener('mousemove', mouseMoveHandler); overlay.removeEventListener('mouseup', mouseUpHandler);
+            const boxRect = selectionBox.getBoundingClientRect(); document.body.removeChild(overlay);
+            const target = document.getElementById('container'), targetRect = target.getBoundingClientRect();
+            html2canvas(target, { useCORS: true, allowTaint: false }).then(canvas => {
+              const scaleFactor = canvas.width / targetRect.width;
+              const sx = (boxRect.left - targetRect.left) * scaleFactor, sy = (boxRect.top - targetRect.top) * scaleFactor;
+              const sWidth = boxRect.width * scaleFactor, sHeight = boxRect.height * scaleFactor;
+              const croppedCanvas = document.createElement('canvas'); croppedCanvas.width = sWidth; croppedCanvas.height = sHeight;
+              const ctx = croppedCanvas.getContext('2d'); ctx.drawImage(canvas, sx, sy, sWidth, sHeight, 0, 0, sWidth, sHeight);
+              croppedCanvas.toBlob(blob => { if (!blob) return; const item = new ClipboardItem({ 'image/png': blob }); navigator.clipboard.write([item]).then(() => showMessagePopup('Screenshot copied to clipboard.')).catch(err => { console.error(err); showMessagePopup('Failed to copy screenshot to clipboard.'); }); });
+            });
+          }
+          overlay.addEventListener('mousemove', mouseMoveHandler); overlay.addEventListener('mouseup', mouseUpHandler);
+        });
+      });
+      showPage(currentPage);
       if (authToken) {
-        try {
-          await loadProgressFromServer();
-        } catch (err) {
-          console.error(err);
-        }
+        try { await loadProgressFromServer(); } catch (err) { console.error(err); clearSessionLocally(); }
       }
       initTutorial();
     });
   </script>
-
 <div id="tutorialOverlay">
   <div id="tutorialBox">
     <img id="tutorialImage" src="" alt="Tutorial">
     <button id="tutorialNext" type="button" aria-label="Next tutorial slide">›</button>
   </div>
 </div>
-    <!-- ©XDY. All rights reserved. This code is the intellectual property of XDY. Unauthorized copying, reproduction, or redistribution is strictly prohibited. For educational use only. Contact the author for permissions. -->
 </body>
 </html>
