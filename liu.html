@@ -1028,37 +1028,103 @@ const TUTORIAL_IMAGES = [
       }
     }
 
+function payloadHasMeaningfulProgress(progress) {
+  const safe = progress && typeof progress === "object" ? progress : {};
+  const inputValues = safe.inputValues && typeof safe.inputValues === "object" ? safe.inputValues : {};
+  const solvedPages = Array.isArray(safe.solvedHubPages)
+    ? safe.solvedHubPages.map(Number).filter(n => SUB_PAGES.includes(n))
+    : [];
+
+  const hasInputs = Object.values(inputValues).some(v => String(v || "").trim() !== "");
+  const hasSolvedPages = solvedPages.length > 0;
+  const hasOtherProgress =
+    Number(safe.currentPage || 1) > 1 ||
+    !!safe.choiceTarget ||
+    !!safe.page21ShownAlready ||
+    !!safe.currentPdfUrl;
+
+  return hasInputs || hasSolvedPages || hasOtherProgress;
+}
+
+function getPayloadProgressScore(progress) {
+  const safe = progress && typeof progress === "object" ? progress : {};
+  const inputValues = safe.inputValues && typeof safe.inputValues === "object" ? safe.inputValues : {};
+  const solvedPages = Array.isArray(safe.solvedHubPages)
+    ? [...new Set(safe.solvedHubPages.map(Number).filter(n => SUB_PAGES.includes(n)))]
+    : [];
+
+  const filledInputs = Object.values(inputValues).filter(v => String(v || "").trim() !== "").length;
+  const solvedCount = solvedPages.length;
+
+  const currentPageNum = Number(safe.currentPage);
+  let stageScore = 0;
+
+  if (currentPageNum >= 24) stageScore = 7;
+  else if (currentPageNum === 22 || currentPageNum === 23) stageScore = 6;
+  else if (currentPageNum === 21) stageScore = 5;
+  else if (SUB_PAGES.includes(currentPageNum)) stageScore = 4;
+  else if (currentPageNum === 4) stageScore = 3;
+  else if (currentPageNum === 3) stageScore = 2;
+  else if (currentPageNum === 2) stageScore = 1;
+
+  const choiceBonus = safe.choiceTarget ? 20 : 0;
+  const page21Bonus = safe.page21ShownAlready ? 10 : 0;
+  const pdfBonus = safe.currentPdfUrl ? 1 : 0;
+
+  return (solvedCount * 1000) + (stageScore * 100) + (filledInputs * 5) + choiceBonus + page21Bonus + pdfBonus;
+}
+    
     async function loginUser() {
-      const { usernameInput, passwordInput } = getAuthElements();
-      const username = usernameInput.value.trim();
-      const password = passwordInput.value;
+  const { usernameInput, passwordInput } = getAuthElements();
+  const username = usernameInput.value.trim();
+  const password = passwordInput.value;
 
-      if (!username || !password) {
-        setAuthStatus("Enter username and password", true);
-        return;
+  if (!username || !password) {
+    setAuthStatus("Enter username and password", true);
+    return;
+  }
+
+  try {
+    setAuthStatus("Logging in...");
+
+    const localPayload = buildProgressPayload();
+
+    const result = await apiFetch("/api/login", {
+      method: "POST",
+      body: JSON.stringify({ username, password, appId: APP_ID })
+    });
+
+    saveSessionLocally(result.token, result.username || username);
+    passwordInput.value = "";
+
+    const remotePayload = result.saveData || {};
+    const localHas = payloadHasMeaningfulProgress(localPayload);
+    const remoteHas = payloadHasMeaningfulProgress(remotePayload);
+
+    if (localHas && remoteHas) {
+      const localScore = getPayloadProgressScore(localPayload);
+      const remoteScore = getPayloadProgressScore(remotePayload);
+
+      if (localScore >= remoteScore) {
+        setAuthStatus("Keeping current progress...");
+        await saveProgressToServer();
+      } else {
+        applyProgressPayload(remotePayload);
+        setAuthStatus("Loaded saved progress.");
       }
-
-      try {
-        setAuthStatus("Logging in...");
-        const result = await apiFetch("/api/login", {
-          method: "POST",
-          body: JSON.stringify({ username, password, appId: APP_ID })
-        });
-
-        saveSessionLocally(result.token, result.username || username);
-        passwordInput.value = "";
-
-        if (result.saveData) {
-          applyProgressPayload(result.saveData);
-        } else {
-          await loadProgressFromServer();
-        }
-
-        setAuthStatus("Login successful.");
-      } catch (err) {
-        setAuthStatus(err.message || "Login failed", true);
-      }
+    } else if (localHas) {
+      setAuthStatus("Saving current progress...");
+      await saveProgressToServer();
+    } else if (remoteHas) {
+      applyProgressPayload(remotePayload);
+      setAuthStatus("Loaded saved progress.");
+    } else {
+      setAuthStatus("Login successful.");
     }
+  } catch (err) {
+    setAuthStatus(err.message || "Login failed", true);
+  }
+}
 
     async function loadProgressFromServer() {
       if (!authToken) return;
