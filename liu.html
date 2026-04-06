@@ -1017,9 +1017,9 @@ const TUTORIAL_IMAGES = [
         saveSessionLocally(result.token, result.username || username);
         passwordInput.value = "";
 
-        if (result.saveData) {
-          applyProgressPayload(result.saveData);
-        }
+if (result.saveData && payloadHasMeaningfulProgress(result.saveData)) {
+  await applyProgressPayload(result.saveData);
+}
 
         setAuthStatus("Account created.");
         queueAutoSave();
@@ -1074,9 +1074,11 @@ function getPayloadProgressScore(progress) {
   return (solvedCount * 1000) + (stageScore * 100) + (filledInputs * 5) + choiceBonus + page21Bonus + pdfBonus;
 }
     
-    async function loginUser() {
-  const { usernameInput, passwordInput } = getAuthElements();
-  const username = usernameInput.value.trim();
+async function loginUser() {
+  const usernameInput = document.getElementById("student-username");
+  const passwordInput = document.getElementById("student-password");
+
+  const username = usernameInput.value.trim().toLowerCase();
   const password = passwordInput.value;
 
   if (!username || !password) {
@@ -1084,9 +1086,8 @@ function getPayloadProgressScore(progress) {
     return;
   }
 
+  setAuthStatus("Logging in...");
   try {
-    setAuthStatus("Logging in...");
-
     const localPayload = buildProgressPayload();
 
     const result = await apiFetch("/api/login", {
@@ -1097,7 +1098,21 @@ function getPayloadProgressScore(progress) {
     saveSessionLocally(result.token, result.username || username);
     passwordInput.value = "";
 
-    const remotePayload = result.saveData || {};
+    let remotePayload = {};
+    try {
+      const loadResult = await apiFetch("/api/load?appId=" + encodeURIComponent(APP_ID), {
+        method: "GET"
+      });
+      remotePayload = (loadResult && loadResult.saveData && typeof loadResult.saveData === "object")
+        ? loadResult.saveData
+        : {};
+    } catch (err) {
+      console.error("Could not load remote save after login:", err);
+      remotePayload = (result.saveData && typeof result.saveData === "object")
+        ? result.saveData
+        : {};
+    }
+
     const localHas = payloadHasMeaningfulProgress(localPayload);
     const remoteHas = payloadHasMeaningfulProgress(remotePayload);
 
@@ -1105,21 +1120,23 @@ function getPayloadProgressScore(progress) {
       const localScore = getPayloadProgressScore(localPayload);
       const remoteScore = getPayloadProgressScore(remotePayload);
 
-      if (localScore >= remoteScore) {
-        setAuthStatus("Keeping current progress...");
+      if (localScore > remoteScore) {
+        setSaveStatus("Saving...");
         await saveProgressToServer();
+        setSaveStatus("Saved");
       } else {
-        applyProgressPayload(remotePayload);
-        setAuthStatus("Loaded saved progress.");
+        await applyProgressPayload(remotePayload);
+        setSaveStatus("Loaded");
       }
-    } else if (localHas) {
-      setAuthStatus("Saving current progress...");
-      await saveProgressToServer();
     } else if (remoteHas) {
-      applyProgressPayload(remotePayload);
-      setAuthStatus("Loaded saved progress.");
+      await applyProgressPayload(remotePayload);
+      setSaveStatus("Loaded");
+    } else if (localHas) {
+      setSaveStatus("Saving...");
+      await saveProgressToServer();
+      setSaveStatus("Saved");
     } else {
-      setAuthStatus("Login successful.");
+      setSaveStatus("Loaded");
     }
   } catch (err) {
     setAuthStatus(err.message || "Login failed", true);
